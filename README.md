@@ -1,7 +1,7 @@
 # Hackathon OpenAI
 
 ## Descripción
-Smart Optimizer: Agente que evalúa la complejidad de tareas y selecciona el modelo LLM más eficiente (GPT-3.5 vs GPT-4), refinando respuestas con un solo LLM y validando calidad con un Juez LLM. Demuestra "IA que piensa antes de gastar".
+Proyecto para Hackathon Kavak x OpenAI México 2025: Agente que evalúa la complejidad de tareas y selecciona el modelo LLM más eficiente (GPT-3.5 vs GPT-4), refinando respuestas con un solo LLM y validando calidad con un Juez LLM. Demuestra "IA que piensa antes de gastar".
 
 ## Instalación
 
