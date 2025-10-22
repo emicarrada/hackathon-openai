@@ -35,7 +35,7 @@ Smart Optimizer: Agente que evalúa la complejidad de tareas y selecciona el mod
 ### Implementado en Evento (23 oct)
 
 - 🔄 Lógica de Evaluación: Análisis de complejidad (longitud, keywords).
-- 🔄 Generación/Refinamiento: Prompts para auto-feedback con un LLM.
+- 🔄 Generación/Refinamiento: Prompts para auto-feedback con un solo LLM.
 - 🔄 Validación: Juez LLM para comparación objetiva.
 - 🔄 Demos: Casos mixtos (GPT-3.5 gana en simple, GPT-4 en complejo).
 - 🔄 Testing: Validación end-to-end y métricas de ahorro.
