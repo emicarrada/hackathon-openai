@@ -1,0 +1,8 @@
+{
+  "estrategias": {
+    "baja": "gpt-3.5-turbo",
+    "media": "gpt-4-turbo",
+    "alta": "gpt-4-turbo"
+  },
+  "notas": "Estrategias iniciales basadas en complejidad. Se actualizarán durante el evento con aprendizaje real."
+}

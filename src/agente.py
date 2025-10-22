@@ -12,6 +12,12 @@ Arquitectura: 3 nodos en LangGraph
 PRE-EVENTO: Solo stubs y estructura. Nada funcional.
 """
 
+from langgraph.graph import StateGraph, END
+from typing import TypedDict
+from nodos.evaluar_complejidad import evaluar_complejidad
+from nodos.generar_refinar import generar_refinar
+from nodos.validar_calidad import validar_calidad
+
 class SmartOptimizerAgent:
     """
     Agente principal que orquesta el proceso de optimización inteligente de LLM.
@@ -90,3 +96,51 @@ class SmartOptimizerAgent:
             "metricas": validacion,
             "modelo_usado": complejidad["modelo_recomendado"]
         }
+
+
+# Estado para LangGraph
+class AgentState(TypedDict):
+    tarea: str
+    complejidad: dict
+    respuesta: str
+    validacion: dict
+
+
+# Funciones de nodos para LangGraph (llaman a stubs)
+def nodo_evaluar(state: AgentState) -> AgentState:
+    """Nodo 1: Evaluar complejidad."""
+    state["complejidad"] = evaluar_complejidad(state["tarea"])
+    return state
+
+
+def nodo_generar(state: AgentState) -> AgentState:
+    """Nodo 2: Generar y refinar."""
+    modelo = state["complejidad"]["modelo"]
+    state["respuesta"] = generar_refinar(state["tarea"], modelo=modelo)
+    return state
+
+
+def nodo_validar(state: AgentState) -> AgentState:
+    """Nodo 3: Validar calidad."""
+    # Baseline placeholder
+    baseline = "Respuesta baseline placeholder"
+    state["validacion"] = validar_calidad(state["respuesta"], baseline)
+    return state
+
+
+# Construir el grafo con LangGraph
+builder = StateGraph(AgentState)
+
+# Agregar nodos
+builder.add_node("evaluar", nodo_evaluar)
+builder.add_node("generar", nodo_generar)
+builder.add_node("validar", nodo_validar)
+
+# Definir flujo: evaluar -> generar -> validar -> END
+builder.set_entry_point("evaluar")
+builder.add_edge("evaluar", "generar")
+builder.add_edge("generar", "validar")
+builder.add_edge("validar", END)
+
+# Compilar grafo
+graph = builder.compile()
