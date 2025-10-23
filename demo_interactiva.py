@@ -220,11 +220,22 @@ def main():
         tokens1 = metricas1.get("tokens_totales", 0)
         modelo1 = metricas1.get("modelo_usado", "desconocido")
         costo1 = metricas1.get("costo_total", 0)
+        respuesta1 = resultado1.get("resultado_tarea", "")
         
         print(Fore.GREEN + f"\n✅ Run 1 completado" + Style.RESET_ALL)
         print(f"   Modelo: {Fore.RED}{modelo1}{Style.RESET_ALL}")
         print(f"   Tokens: {tokens1}")
         print(f"   Costo: {Fore.RED}${costo1:.6f}{Style.RESET_ALL}")
+        
+        # Mostrar respuesta generada
+        print(f"\n{Fore.CYAN}📝 Respuesta generada:{Style.RESET_ALL}")
+        print(f"{Fore.WHITE}{'─'*80}{Style.RESET_ALL}")
+        # Limitar a 300 caracteres para no saturar pantalla
+        if len(respuesta1) > 300:
+            print(f"{respuesta1[:300]}...")
+        else:
+            print(respuesta1)
+        print(f"{Fore.WHITE}{'─'*80}{Style.RESET_ALL}")
         
         # 6. Mostrar aprendizaje
         mostrar_seccion_aprendizaje(resultado1)
@@ -241,11 +252,22 @@ def main():
         tokens2 = metricas2.get("tokens_totales", 0)
         modelo2 = metricas2.get("modelo_usado", "desconocido")
         costo2 = metricas2.get("costo_total", 0)
+        respuesta2 = resultado2.get("resultado_tarea", "")
         
         print(Fore.GREEN + f"\n✅ Run 2 completado" + Style.RESET_ALL)
         print(f"   Modelo: {Fore.GREEN}{modelo2}{Style.RESET_ALL}")
         print(f"   Tokens: {tokens2}")
         print(f"   Costo: {Fore.GREEN}${costo2:.6f}{Style.RESET_ALL}")
+        
+        # Mostrar respuesta generada
+        print(f"\n{Fore.CYAN}📝 Respuesta generada:{Style.RESET_ALL}")
+        print(f"{Fore.WHITE}{'─'*80}{Style.RESET_ALL}")
+        # Limitar a 300 caracteres
+        if len(respuesta2) > 300:
+            print(f"{respuesta2[:300]}...")
+        else:
+            print(respuesta2)
+        print(f"{Fore.WHITE}{'─'*80}{Style.RESET_ALL}")
         
         # 8. Mostrar visualización comparativa (si ambos runs tienen métricas)
         if tokens1 > 0 and tokens2 > 0:

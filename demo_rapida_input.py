@@ -67,10 +67,13 @@ def main():
     
     resultado1 = agente.ejecutar(tarea)
     metricas1 = resultado1.get("metricas_ejecucion", {})
+    respuesta1 = resultado1.get("resultado_tarea", "")
     
     print(Fore.GREEN + f"\n✅ Run 1 completado: {metricas1.get('modelo_usado', 'N/A')}")
     print(f"   Tokens: {metricas1.get('tokens_totales', 0)}")
     print(f"   Costo: ${metricas1.get('costo_total', 0):.6f}")
+    print(f"\n{Fore.CYAN}📝 Respuesta:{Style.RESET_ALL}")
+    print(f"   {respuesta1[:200]}..." if len(respuesta1) > 200 else f"   {respuesta1}")
     
     # Aprendizaje
     print("\n" + "="*80)
@@ -86,10 +89,13 @@ def main():
     
     resultado2 = agente.ejecutar(tarea)
     metricas2 = resultado2.get("metricas_ejecucion", {})
+    respuesta2 = resultado2.get("resultado_tarea", "")
     
     print(Fore.GREEN + f"\n✅ Run 2 completado: {metricas2.get('modelo_usado', 'N/A')}")
     print(f"   Tokens: {metricas2.get('tokens_totales', 0)}")
     print(f"   Costo: ${metricas2.get('costo_total', 0):.6f}")
+    print(f"\n{Fore.CYAN}📝 Respuesta:{Style.RESET_ALL}")
+    print(f"   {respuesta2[:200]}..." if len(respuesta2) > 200 else f"   {respuesta2}")
     
     # Visualización
     if metricas1.get('tokens_totales', 0) > 0 and metricas2.get('tokens_totales', 0) > 0:
