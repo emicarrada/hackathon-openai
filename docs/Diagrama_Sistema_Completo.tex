@@ -1,0 +1,221 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{tikz}
+\usepackage{xcolor}
+\usepackage{fontawesome5}
+\usetikzlibrary{shapes.geometric, arrows.meta, positioning, shadows, decorations.pathmorphing}
+
+\definecolor{evaluador}{RGB}{255,107,107}
+\definecolor{generador}{RGB}{78,205,196}
+\definecolor{validador}{RGB}{255,195,113}
+\definecolor{usuario}{RGB}{162,155,254}
+\definecolor{resultado}{RGB}{116,185,255}
+
+\tikzset{
+    nodo/.style={
+        rectangle,
+        rounded corners=5pt,
+        minimum width=3cm,
+        minimum height=1.2cm,
+        text centered,
+        draw=black,
+        line width=1.5pt,
+        drop shadow,
+        font=\sffamily\bfseries
+    },
+    evaluador/.style={nodo, fill=evaluador!30},
+    generador/.style={nodo, fill=generador!30},
+    validador/.style={nodo, fill=validador!30},
+    usuario/.style={nodo, fill=usuario!30, minimum width=4cm},
+    resultado/.style={nodo, fill=resultado!30, minimum width=4cm},
+    flecha/.style={
+        -Stealth,
+        line width=2pt,
+        draw=black!70
+    },
+    etiqueta/.style={
+        font=\sffamily\small,
+        text width=3.5cm,
+        align=center
+    }
+}
+
+\begin{document}
+
+\begin{tikzpicture}[node distance=2.5cm]
+
+% ========== TÍTULO ==========
+\node[font=\sffamily\Huge\bfseries, text=black] at (0, 10) {Smart Optimizer - Hackathon OpenAI 2025};
+\node[font=\sffamily\Large, text=black!70] at (0, 9.2) {Sistema de Optimización Inteligente con 3 Nodos};
+
+% ========== USUARIO ==========
+\node[usuario] (input) at (0, 7) {
+    \faUser~USUARIO\\
+    \small Input
+};
+
+% ========== NODO 1: EVALUADOR (Brandon) ==========
+\node[evaluador, below=of input] (evaluador) {
+    \faBrain~EVALUADOR\\
+    \small Brandon
+};
+
+\node[etiqueta, right=0.3cm of evaluador, text width=5cm, align=left] (eval_detail) {
+    \textbf{Clasificación Heurística:}\\
+    • 24 keywords alta\\
+    • 12 keywords baja\\
+    • 6 keywords media\\
+    • Análisis regex\\
+    • Sistema de puntos
+};
+
+\node[etiqueta, below=0.2cm of evaluador] (eval_output) {
+    \textcolor{evaluador}{\textbf{Output:}}\\
+    Complejidad: \texttt{baja|media|alta}\\
+    Modelo: \texttt{gpt-4o-mini|gpt-4o}
+};
+
+% ========== NODO 2: GENERADOR (Israel) ==========
+\node[generador, below=3.5cm of evaluador] (generador) {
+    \faCode~GENERADOR\\
+    \small Israel
+};
+
+\node[etiqueta, right=0.3cm of generador, text width=5cm, align=left] (gen_detail) {
+    \textbf{Generación con Cache:}\\
+    • Consulta memoria caché\\
+    • Genera respuesta inicial\\
+    • Refina con contexto\\
+    • Guarda en caché\\
+    • Tokens optimizados
+};
+
+\node[etiqueta, below=0.2cm of generador] (gen_output) {
+    \textcolor{generador}{\textbf{Output:}}\\
+    Respuesta refinada\\
+    Tokens usados: \texttt{N}\\
+    Cache: \texttt{hit|miss}
+};
+
+% ========== NODO 3: VALIDADOR (Cristopher) ==========
+\node[validador, below=3.5cm of generador] (validador) {
+    \faCheckCircle~VALIDADOR\\
+    \small Cristopher (Hub)
+};
+
+\node[etiqueta, right=0.3cm of validador, text width=5cm, align=left] (val_detail) {
+    \textbf{Validación con LLM-Juez:}\\
+    • Calidad de respuesta (0-10)\\
+    • Comparación con gpt-4.1\\
+    • Cálculo de ahorro\\
+    • Tokens vs baseline\\
+    • ROI y eficiencia
+};
+
+\node[etiqueta, below=0.2cm of validador] (val_output) {
+    \textcolor{validador}{\textbf{Output:}}\\
+    Calidad: \texttt{8.5/10}\\
+    Ahorro: \texttt{75\%}\\
+    Recomendación: \texttt{Óptimo}
+};
+
+% ========== RESULTADO ==========
+\node[resultado, below=3cm of validador] (output) {
+    \faCheckDouble~RESULTADO\\
+    \small Respuesta + Métricas
+};
+
+% ========== AUTOMEJORA (FEEDBACK LOOP) ==========
+\node[draw=purple!70, very thick, rounded corners, fill=purple!10, text width=3.5cm, align=center, left=1cm of generador, yshift=-3cm] (automejora) {
+    \textbf{\faRecycle~AUTOMEJORA}\\[0.2cm]
+    \small Ajuste dinámico\\
+    de estrategias
+};
+
+% ========== FLECHAS PRINCIPALES ==========
+\draw[flecha] (input) -- node[etiqueta, right=0.2cm] {
+    \small Tarea del usuario:\\
+    \textit{"Explica ML"}
+} (evaluador);
+
+\draw[flecha] (evaluador) -- node[etiqueta, right=0.2cm] {
+    \small Complejidad:\\
+    \texttt{"media"} → \texttt{gpt-4o-mini}
+} (generador);
+
+\draw[flecha] (generador) -- node[etiqueta, right=0.2cm] {
+    \small Respuesta generada:\\
+    + tokens usados
+} (validador);
+
+\draw[flecha] (validador) -- node[etiqueta, right=0.2cm] {
+    \small Validación completa:\\
+    Calidad + Ahorro + ROI
+} (output);
+
+% ========== FLECHA DE FEEDBACK (AUTOMEJORA) ==========
+\draw[flecha, purple!70, very thick, dashed, -Stealth] 
+    (validador.west) 
+    to[out=180, in=90] 
+    node[etiqueta, left=0.1cm, text width=2.5cm] {
+        \small \textcolor{purple}{\textbf{Feedback}}\\
+        Si calidad < 7/10\\
+        → Ajustar estrategia
+    } 
+    (automejora.north);
+
+\draw[flecha, purple!70, very thick, dashed, -Stealth] 
+    (automejora.north) 
+    to[out=90, in=180] 
+    node[etiqueta, left=0.1cm, text width=2.5cm] {
+        \small \textcolor{purple}{\textbf{Reajuste}}\\
+        Actualiza umbral\\
+        de complejidad
+    } 
+    (evaluador.west);
+
+% ========== MODELOS A LA IZQUIERDA ==========
+\node[draw=black!50, thick, rounded corners, fill=black!5, text width=3.5cm, align=center, left=1cm of evaluador, yshift=1cm] (modelos) {
+    \textbf{\faServer~Modelos OpenAI}\\[0.3cm]
+    \textcolor{green!60!black}{\texttt{gpt-4o-mini}}\\
+    \small Complejidad baja/media\\[0.2cm]
+    \textcolor{blue!60!black}{\texttt{gpt-4o}}\\
+    \small Complejidad alta\\[0.2cm]
+    \textcolor{red!60!black}{\texttt{gpt-4.1}}\\
+    \small Baseline (comparación)
+};
+
+% ========== MÉTRICAS A LA DERECHA ==========
+\node[draw=black!50, thick, rounded corners, fill=black!5, text width=3.5cm, align=center, right=6.5cm of validador, yshift=3cm] (metricas) {
+    \textbf{\faChartLine~Métricas Clave}\\[0.3cm]
+    \faCoins~\textbf{Ahorro de costos}\\
+    \small 60-80\% vs baseline\\[0.2cm]
+    \faClock~\textbf{Latencia}\\
+    \small Optimizada con cache\\[0.2cm]
+    \faAward~\textbf{Calidad}\\
+    \small Validada por LLM-Juez\\[0.2cm]
+    \faRocket~\textbf{ROI}\\
+    \small Alto rendimiento
+};
+
+% ========== EQUIPO ABAJO ==========
+\node[draw=black!50, thick, rounded corners, fill=black!5, text width=12cm, align=center, below=0.5cm of output] (equipo) {
+    \textbf{\faUsers~Equipo Hackathon}\\[0.2cm]
+    \textcolor{evaluador}{\textbf{Brandon}} (Evaluador) $\mid$ 
+    \textcolor{generador}{\textbf{Israel}} (Generador) $\mid$ 
+    \textcolor{validador}{\textbf{Cristopher}} (Hub/Validador)\\[0.1cm]
+    \small 23 de octubre, 2025
+};
+
+% ========== LEYENDA TECNOLOGÍAS ==========
+\node[draw=black!50, thick, rounded corners, fill=black!5, text width=3.5cm, align=left, left=1cm of validador, yshift=-1cm] (tech) {
+    \textbf{\faCog~Stack Técnico}\\[0.2cm]
+    • LangGraph 0.0.40+\\
+    • OpenAI API\\
+    • Python 3.10+\\
+    • pytest (testing)\\
+    • JSON (estrategias)
+};
+
+\end{tikzpicture}
+
+\end{document}
