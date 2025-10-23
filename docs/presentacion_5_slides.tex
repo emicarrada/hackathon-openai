@@ -1,0 +1,175 @@
+\documentclass[aspectratio=169,14pt]{beamer}
+\usetheme{Madrid}
+\usecolortheme{seahorse}
+
+% Paquetes
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath}
+\usepackage{graphicx}
+
+% Colores
+\definecolor{mainblue}{RGB}{0,102,204}
+\definecolor{maingreen}{RGB}{34,177,76}
+\definecolor{mainorange}{RGB}{255,127,0}
+\definecolor{mainred}{RGB}{220,53,69}
+
+% Info
+\title[Smart Optimizer]{Smart Optimizer}
+\subtitle{IA que se optimiza a sí misma}
+\author[Equipo]{Emiliano Carrada, Brandon, Israel, Cristopher}
+\institute{Hackathon Kavak x OpenAI 2025}
+\date{\today}
+
+\begin{document}
+
+% ==========================================
+% SLIDE 1: PORTADA
+% ==========================================
+\begin{frame}
+\titlepage
+\end{frame}
+
+% ==========================================
+% SLIDE 2: EL PROBLEMA
+% ==========================================
+\begin{frame}{El Problema: Costos Prohibitivos}
+
+\begin{center}
+\LARGE
+Usar siempre GPT-4o = \textcolor{mainred}{\textbf{\$61,200/año}}
+
+\vspace{0.5cm}
+
+Usar siempre GPT-3.5-turbo = \textcolor{mainorange}{\textbf{Calidad inconsistente}}
+\end{center}
+
+\vspace{1cm}
+
+\begin{block}{Caso Real: 100K consultas/mes}
+\begin{itemize}
+    \item Sin optimización: \textcolor{mainred}{\textbf{\$61,200/año}}
+    \item Con Smart Optimizer: \textcolor{maingreen}{\textbf{\$13,200/año}}
+    \item \textbf{Ahorro: \$48,000 USD (78\%)}
+\end{itemize}
+\end{block}
+
+\end{frame}
+
+% ==========================================
+% SLIDE 3: LA SOLUCIÓN
+% ==========================================
+\begin{frame}{Smart Optimizer: Sistema Auto-Mejorable}
+
+\begin{center}
+\Large \textbf{Aprende de sus propios errores}
+\end{center}
+
+\vspace{0.5cm}
+
+\begin{columns}[T]
+\begin{column}{0.48\textwidth}
+\begin{alertblock}{Run 1: Inocente}
+\begin{itemize}
+    \item Modelo: GPT-4o
+    \item Tokens: 1,500
+    \item Costo: \$0.045
+\end{itemize}
+\end{alertblock}
+\end{column}
+
+\begin{column}{0.48\textwidth}
+\begin{exampleblock}{Run 2: Inteligente}
+\begin{itemize}
+    \item Modelo: GPT-3.5-turbo
+    \item Tokens: 200
+    \item Costo: \$0.0004
+\end{itemize}
+\end{exampleblock}
+\end{column}
+\end{columns}
+
+\vspace{0.5cm}
+
+\begin{center}
+\LARGE
+\textcolor{maingreen}{\textbf{92\% ahorro en costo}}
+\end{center}
+
+\end{frame}
+
+% ==========================================
+% SLIDE 4: CÓMO FUNCIONA
+% ==========================================
+\begin{frame}{Arquitectura: 6 Nodos Auto-Mejorables}
+
+\begin{enumerate}
+    \item \textbf{Recibir Tarea} $\rightarrow$ Clasifica tipo (resumen, traducción, etc.)
+    
+    \vspace{0.3cm}
+    
+    \item \textbf{Consultar Memoria} $\rightarrow$ Busca estrategia aprendida
+    
+    \vspace{0.3cm}
+    
+    \item \textbf{Ejecutar Tarea} $\rightarrow$ Llama OpenAI API
+    
+    \vspace{0.3cm}
+    
+    \item \textbf{Evaluar Métricas} $\rightarrow$ Captura tokens, costo, latencia
+    
+    \vspace{0.3cm}
+    
+    \item \textbf{Auditor LLM} $\rightarrow$ Detecta desperdicio
+    
+    \vspace{0.3cm}
+    
+    \item \textbf{Actualizar Memoria} $\rightarrow$ Guarda modelo optimizado
+\end{enumerate}
+
+\vspace{0.3cm}
+
+\begin{center}
+\textit{Tecnología: LangGraph + OpenAI API + Memoria JSON}
+\end{center}
+
+\end{frame}
+
+% ==========================================
+% SLIDE 5: RESULTADOS Y DEMO
+% ==========================================
+\begin{frame}{Resultados Comprobables}
+
+\begin{table}[h]
+\centering
+\Large
+\begin{tabular}{lcc}
+\textbf{Métrica} & \textbf{Run 1} & \textbf{Run 2} \\
+\hline
+Tokens & 1,500 & 200 \\
+Costo & \$0.045 & \$0.0004 \\
+Ahorro & -- & \textcolor{maingreen}{\textbf{92\%}} \\
+\end{tabular}
+\end{table}
+
+\vspace{0.5cm}
+
+\begin{block}{Demo en Vivo}
+\texttt{python demo\_interactiva.py}
+\begin{itemize}
+    \item Ejecuta Run 1 (modelo caro)
+    \item Sistema aprende automáticamente
+    \item Ejecuta Run 2 (modelo optimizado)
+    \item Muestra comparación visual
+\end{itemize}
+\end{block}
+
+\vspace{0.3cm}
+
+\begin{center}
+\textbf{GitHub:} \texttt{github.com/emicarrada/hackathon-openai}
+\end{center}
+
+\end{frame}
+
+\end{document}
