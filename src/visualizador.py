@@ -82,8 +82,8 @@ def calcular_mejora(valor1: float, valor2: float, invertir: bool = False) -> Tup
 
 
 def formatear_costo(costo: float) -> str:
-    """Formatea costo en USD con 6 decimales."""
-    return f"${costo:.6f}"
+    """Formatea costo en USD con 6 decimales y sufijo USD."""
+    return f"${costo:.6f} USD"
 
 
 def formatear_latencia(latencia: float) -> str:

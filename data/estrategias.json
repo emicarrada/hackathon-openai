@@ -1,8 +1,8 @@
 {
-  "resumen": {
+  "general": {
     "modelo": "gpt-3.5-turbo",
-    "tokens_promedio": 82,
+    "tokens_promedio": 402,
     "latencia_promedio": 0.0,
-    "ultima_actualizacion": "2025-10-23T15:58:42.819904"
+    "ultima_actualizacion": "2025-10-23T16:26:12.445372"
   }
 }

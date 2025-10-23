@@ -231,7 +231,9 @@ def main():
         print(Fore.GREEN + f"\n✅ Run 1 completado" + Style.RESET_ALL)
         print(f"   Modelo: {Fore.RED}{modelo1}{Style.RESET_ALL}")
         print(f"   Tokens: {tokens1}")
-        print(f"   Costo: {Fore.RED}${costo1:.6f}{Style.RESET_ALL}")
+        print(f"   Costo: {Fore.RED}${costo1:.6f} USD{Style.RESET_ALL}")
+        print(f"   Velocidad: {metricas1.get('tokens_por_segundo', 0):.2f} tokens/seg")
+        print(f"   Eficiencia: {metricas1.get('eficiencia', 0):.0f} tokens/$ USD")
         
         # Mostrar respuesta generada COMPLETA
         print(f"\n{Fore.CYAN}📝 Respuesta generada (COMPLETA):{Style.RESET_ALL}")
@@ -260,7 +262,9 @@ def main():
         print(Fore.GREEN + f"\n✅ Run 2 completado" + Style.RESET_ALL)
         print(f"   Modelo: {Fore.GREEN}{modelo2}{Style.RESET_ALL}")
         print(f"   Tokens: {tokens2}")
-        print(f"   Costo: {Fore.GREEN}${costo2:.6f}{Style.RESET_ALL}")
+        print(f"   Costo: {Fore.GREEN}${costo2:.6f} USD{Style.RESET_ALL}")
+        print(f"   Velocidad: {metricas2.get('tokens_por_segundo', 0):.2f} tokens/seg")
+        print(f"   Eficiencia: {metricas2.get('eficiencia', 0):.0f} tokens/$ USD")
         
         # Mostrar respuesta generada COMPLETA
         print(f"\n{Fore.CYAN}📝 Respuesta generada (COMPLETA):{Style.RESET_ALL}")
@@ -386,10 +390,15 @@ def main():
             from src.graficos import generar_grafico_ahorro
             
             if tokens1 > 0 and tokens2 > 0:
-                print()
-                print(Fore.CYAN + "📊 Generando gráfico comparativo..." + Style.RESET_ALL)
-                generar_grafico_ahorro(metricas1, metricas2)
-                print(Fore.GREEN + "✅ Gráfico guardado: comparacion_runs.png" + Style.RESET_ALL)
+                # Verificar que tenemos las claves necesarias
+                claves_necesarias = ['tokens_totales', 'costo_usd', 'latencia']
+                if all(k in metricas1 for k in claves_necesarias) and all(k in metricas2 for k in claves_necesarias):
+                    print()
+                    print(Fore.CYAN + "📊 Generando gráfico comparativo..." + Style.RESET_ALL)
+                    generar_grafico_ahorro(metricas1, metricas2)
+                    print(Fore.GREEN + "✅ Gráfico guardado: comparacion_runs.png" + Style.RESET_ALL)
+                else:
+                    print(Fore.YELLOW + "⚠️  Métricas incompletas para generar gráfico" + Style.RESET_ALL)
         except ImportError:
             print(Fore.YELLOW + "⚠️  Módulo graficos no disponible (instala matplotlib)" + Style.RESET_ALL)
         except Exception as e:
@@ -402,8 +411,8 @@ def main():
             
             print()
             print(Fore.YELLOW + "💰 Resumen del ahorro:" + Style.RESET_ALL)
-            print(f"   Ahorro: {Fore.GREEN}${ahorro_costo:.6f}{Style.RESET_ALL} ({Fore.GREEN}{porcentaje_ahorro:.1f}%{Style.RESET_ALL})")
-            print(f"   Proyección (1000 runs): {Fore.GREEN}${ahorro_costo * 1000:.2f}{Style.RESET_ALL}")
+            print(f"   Ahorro: {Fore.GREEN}${ahorro_costo:.6f} USD{Style.RESET_ALL} ({Fore.GREEN}{porcentaje_ahorro:.1f}%{Style.RESET_ALL})")
+            print(f"   Proyección (1000 runs): {Fore.GREEN}${ahorro_costo * 1000:.2f} USD{Style.RESET_ALL}")
             
             if porcentaje_ahorro > 50:
                 print()
