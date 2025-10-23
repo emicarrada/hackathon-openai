@@ -1,0 +1,21 @@
+\frametitle{Apéndice: Ejemplo de Estrategia JSON}
+\begin{lstlisting}
+{
+  "resumen": {
+    "modelo": "gpt-3.5-turbo",
+    "tokens_promedio": 200,
+    "latencia_promedio": 0.8,
+    "costo_promedio": 0.0004,
+    "runs_exitosos": 5,
+    "ultima_actualizacion": "2025-01-15T10:30:00"
+  },
+  "traduccion": {
+    "modelo": "gpt-3.5-turbo",
+    "tokens_promedio": 180,
+    "latencia_promedio": 0.6,
+    "costo_promedio": 0.0003,
+    "runs_exitosos": 3,
+    "ultima_actualizacion": "2025-01-15T11:00:00"
+  }
+}
+\end{lstlisting}
