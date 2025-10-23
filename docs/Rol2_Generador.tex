@@ -1,0 +1,173 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{listings}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\lstset{
+    language=Python,
+    basicstyle=\ttfamily\small,
+    breaklines=true,
+    captionpos=b
+}
+
+\title{Guía Detallada para Israel Cabrera - Generador/Refinador (Spoke2)}
+\author{Hackathon OpenAI - Smart Optimizer}
+\date{22 de octubre de 2025}
+
+\begin{document}
+
+\maketitle
+
+\section{Rol: Israel Cabrera - Generador/Refinador (Spoke2)}
+Eres el responsable de generar respuestas iniciales y refinarlas usando Self-Refine con un solo LLM. Tu objetivo es crear un output inicial, analizarlo internamente con el mismo LLM, y mejorar iterativamente. Selecciona modelo basado en complejidad (GPT-3.5 o GPT-4).
+
+\section{Cronograma y Tareas Detalladas}
+
+\subsection{8:00-9:15: Setup Inicial}
+- Asigna rol como Spoke2 (Generador/Refinador).
+- Revisa stubs en \texttt{src/nodos/generar\_refinar.py}.
+- Configura entorno: APIs, prompts base.
+
+Pseudocódigo:
+\begin{lstlisting}
+def setup_generador():
+    revisar_archivo("src/nodos/generar_refinar.py")
+    configurar_prompts_base()
+    probar_api_openai()
+    asignar_rol("Generador/Refinador")
+    reportar_a_hub("Setup completado")
+\end{lstlisting}
+
+\subsection{9:15-12:00: Implementación Inicial}
+- Implementa generación inicial: toma tarea y complejidad, genera output con LLM seleccionado.
+- Inicia Self-Refine: prompt al LLM para analizar su propio output y sugerir mejoras.
+
+Pseudocódigo:
+\begin{lstlisting}
+def generar_refinar(tarea: str, complejidad: str) -> str:
+    # Seleccionar modelo
+    modelo = "gpt-3.5-turbo" if complejidad == "baja" else "gpt-4"
+    
+    # Generar output inicial
+    prompt_inicial = f"Responde a: {tarea}"
+    output_inicial = llamar_llm(modelo, prompt_inicial)
+    
+    # Self-Refine: analizar con mismo LLM
+    prompt_refine = f"Analiza tu respuesta: {output_inicial}. ¿Qué mejorar? Sugiere versión refinada."
+    feedback = llamar_llm(modelo, prompt_refine)
+    
+    # Refinar basado en feedback
+    output_refinado = extraer_refinado_de_feedback(feedback)
+    
+    return output_refinado
+
+def llamar_llm(modelo: str, prompt: str) -> str:
+    # Simular llamada API
+    return f"Respuesta de {modelo} a '{prompt[:20]}...'"
+
+def extraer_refinado_de_feedback(feedback: str) -> str:
+    # Parsear feedback para output mejorado
+    return feedback.split("versión refinada:")[-1].strip()
+\end{lstlisting}
+
+\subsection{12:00-13:00: Break y Revisión}
+- Discute progreso: qué prompts funcionan.
+- Ajusta Self-Refine si feedback es pobre.
+
+Pseudocódigo:
+\begin{lstlisting}
+def revision_break():
+    progreso = "Generación inicial implementada"
+    problemas = ["feedback_pobre"] if necesita_ajuste else []
+    reportar_a_hub(progreso, problemas)
+    if "feedback_pobre" in problemas:
+        mejorar_prompt_refine()
+\end{lstlisting}
+
+\subsection{13:00-15:00: Integración y Refinamiento}
+- Completa Self-Refine: itera 1-2 veces.
+- Integra con LangGraph: output como dict para siguiente nodo.
+
+Pseudocódigo:
+\begin{lstlisting}
+def refinar_completo(tarea: str, complejidad: str) -> dict:
+    output = generar_refinar(tarea, complejidad)
+    # Iterar si necesario
+    if necesita_mas_refine(output):
+        output = generar_refinar(tarea, complejidad)  # Iteración
+    
+    return {"output_generado": output, "modelo_usado": modelo}
+\end{lstlisting}
+
+\subsection{15:00-17:00: Testing y Métricas}
+- Crea casos de prueba.
+- Mide mejora: calidad pre/post-refine.
+
+Pseudocódigo:
+\begin{lstlisting}
+def testing_generacion():
+    casos = [{"tarea": "Suma 2+2", "complejidad": "baja"}]
+    for caso in casos:
+        resultado = generar_refinar(caso["tarea"], caso["complejidad"])
+        medir_mejora(resultado)
+\end{lstlisting}
+
+\subsection{17:00-18:00: Documentación y Demo}
+- Documenta Self-Refine.
+- Demo: muestra generación y refinamiento.
+
+Pseudocódigo:
+\begin{lstlisting}
+def documentar_generacion():
+    agregar_seccion_readme("Self-Refine: prompt inicial → feedback → refinado")
+    demo = generar_refinar("Ejemplo", "media")
+    grabar_video(demo)
+\end{lstlisting}
+
+\subsection{18:00: Entrega Final}
+- Verifica subida a GitHub.
+
+\section{Referencia para Implementación Correcta}
+Esta sección guía la traducción del pseudocódigo a código Python real para el Generador/Refinador. Un agente de IA debe seguir estos pasos para implementar Self-Refine correctamente.
+
+\subsection{Pasos Generales para Implementar Código}
+1. **Traducir Pseudocódigo**: Convierte algoritmos a funciones Python. Usa `openai` para llamadas a LLM.
+2. **Self-Refine**: Implementa loop de feedback interno con un solo modelo.
+3. **Compatibilidad**: Retorna dicts para LangGraph. Maneja errores en API calls.
+4. **Mejores Prácticas**: Modulariza prompts, limita iteraciones a 2-3 para evitar costos.
+
+\subsection{Ejemplo de Traducción: Función generar_refinar}
+**Código Real**:
+\begin{lstlisting}
+import openai
+from typing import Dict
+
+def generar_refinar(tarea: str, complejidad: str) -> str:
+    """
+    Genera y refina output usando Self-Refine.
+    """
+    modelo = "gpt-3.5-turbo" if complejidad == "baja" else "gpt-4"
+    client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+    
+    # Prompt inicial
+    prompt_inicial = f"Responde a: {tarea}"
+    response = client.chat.completions.create(
+        model=modelo,
+        messages=[{"role": "user", "content": prompt_inicial}]
+    )
+    output_inicial = response.choices[0].message.content
+    
+    # Self-Refine
+    prompt_refine = f"Analiza: {output_inicial}. Mejora."
+    response_refine = client.chat.completions.create(
+        model=modelo,
+        messages=[{"role": "user", "content": prompt_refine}]
+    )
+    return response_refine.choices[0].message.content
+\end{lstlisting}
+
+**Instrucciones para AI**: Implementa en `src/nodos/generar_refinar.py`. Limita tokens para costos. Prueba con tareas simples/complejas.
+
+\end{document}

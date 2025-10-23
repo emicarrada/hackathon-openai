@@ -1,0 +1,156 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{listings}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\lstset{
+    language=Python,
+    basicstyle=\ttfamily\small,
+    breaklines=true,
+    captionpos=b
+}
+
+\title{Guía Detallada para Cristopher Carrada - Validador/Tester (Hub)}
+\author{Hackathon OpenAI - Smart Optimizer}
+\date{22 de octubre de 2025}
+
+\begin{document}
+
+\maketitle
+
+\section{Rol: Cristopher Carrada - Validador/Tester (Hub)}
+Eres el responsable de validar calidad con Juez LLM y ejecutar testing end-to-end. Tu objetivo es comparar outputs de GPT-3.5 vs GPT-4, medir calidad objetiva, y asegurar mejora cuantitativa en el ciclo completo.
+
+\section{Cronograma y Tareas Detalladas}
+
+\subsection{8:00-9:15: Setup Inicial}
+- Asigna rol como Spoke3 (Validador/Tester).
+- Revisa stubs en \texttt{src/nodos/validar\_calidad.py} y \texttt{src/juez.py}.
+- Configura métricas base.
+
+Pseudocódigo:
+\begin{lstlisting}
+def setup_validador():
+    revisar_archivo("src/nodos/validar_calidad.py")
+    revisar_archivo("src/juez.py")
+    configurar_metricas_base()
+    probar_api_openai()
+    asignar_rol("Validador/Tester")
+    reportar_a_hub("Setup completado")
+\end{lstlisting}
+
+\subsection{9:15-12:00: Implementación Inicial}
+- Implementa Juez LLM: prompt para comparar outputs.
+- Inicia validación: toma outputs y retorna dict con calidad.
+
+Pseudocódigo:
+\begin{lstlisting}
+def validar_calidad(output_gpt35: str, output_gpt4: str, tarea: str) -> dict:
+    # Llamar a Juez LLM
+    prompt_juez = f"Compara: Tarea: {tarea}. Output GPT-3.5: {output_gpt35}. Output GPT-4: {output_gpt4}. ¿Cuál es mejor? Razón."
+    juicio = llamar_juez_llm(prompt_juez)
+    
+    # Parsear juicio
+    mejor_modelo = extraer_mejor_de_juicio(juicio)
+    calidad_gpt35 = calcular_calidad(output_gpt35)
+    calidad_gpt4 = calcular_calidad(output_gpt4)
+    
+    return {
+        "mejor_modelo": mejor_modelo,
+        "calidad_gpt35": calidad_gpt35,
+        "calidad_gpt4": calidad_gpt4,
+        "juicio": juicio
+    }
+
+def llamar_juez_llm(prompt: str) -> str:
+    return f"Juicio: GPT-4 es mejor porque..."
+
+def calcular_calidad(output: str) -> float:
+    # Simular métrica (ej: longitud como proxy)
+    return len(output) / 100  # 0-1
+\end{lstlisting}
+
+\subsection{12:00-13:00: Break y Revisión}
+- Discute setup de Juez.
+- Ajusta prompt si bias.
+
+Pseudocódigo:
+\begin{lstlisting}
+def revision_break():
+    progreso = "Juez LLM implementado"
+    problemas = ["bias_juez"] if necesita_ajuste else []
+    reportar_a_hub(progreso, problemas)
+\end{lstlisting}
+
+\subsection{13:00-15:00: Integración y Refinamiento}
+- Integra validación en LangGraph.
+- Refina métricas: accuracy, costo ahorrado.
+
+Pseudocódigo:
+\begin{lstlisting}
+def validar_completo(state: dict) -> dict:
+    # Tomar outputs del state
+    output35 = state.get("output_gpt35")
+    output4 = state.get("output_gpt4")
+    tarea = state["tarea"]
+    
+    resultado = validar_calidad(output35, output4, tarea)
+    state["validacion"] = resultado
+    return state
+\end{lstlisting}
+
+\subsection{15:00-17:00: Testing y Métricas}
+- Ejecuta tests end-to-end.
+- Mide mejora: Run 1 vs Run 2.
+
+Pseudocódigo:
+\begin{lstlisting}
+def testing_end_to_end():
+    casos = [{"tarea": "Ejemplo", "run1": "Output básico", "run2": "Output mejorado"}]
+    for caso in casos:
+        mejora = medir_mejora(caso["run1"], caso["run2"])
+        print(f"Mejora: {mejora}%")
+\end{lstlisting}
+
+\subsection{17:00-18:00: Documentación y Demo}
+- Documenta métricas.
+- Demo: muestra validación.
+
+Pseudocódigo:
+\begin{lstlisting}
+def documentar_validacion():
+    agregar_seccion_readme("Juez LLM: compara outputs objetivamente")
+    demo = validar_calidad("Out35", "Out4", "Tarea")
+    grabar_video(demo)
+\end{lstlisting}
+
+\subsection{18:00: Entrega Final}
+- Verifica subida.
+
+\section{Referencia para Implementación Correcta}
+Guía para implementar el Validador/Tester con Juez LLM.
+
+\subsection{Pasos Generales}
+1. **Traducir Pseudocódigo**: Usa `openai` para Juez.
+2. **Métricas**: Calcula calidad objetiva.
+3. **Compatibilidad**: Retorna dicts para grafo.
+
+\subsection{Ejemplo: Función validar_calidad}
+**Código Real**:
+\begin{lstlisting}
+import openai
+
+def validar_calidad(output_gpt35: str, output_gpt4: str, tarea: str) -> Dict:
+    client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+    prompt = f"Compara outputs para {tarea}: GPT-3.5: {output_gpt35}, GPT-4: {output_gpt4}. ¿Cuál mejor?"
+    response = client.chat.completions.create(model="gpt-4", messages=[{"role": "user", "content": prompt}])
+    juicio = response.choices[0].message.content
+    mejor = "gpt-4" if "GPT-4" in juicio else "gpt-3.5"
+    return {"mejor_modelo": mejor, "juicio": juicio}
+\end{lstlisting}
+
+**Instrucciones para AI**: Implementa en `src/nodos/validar_calidad.py`. Usa métricas como precisión.
+
+\end{document}

@@ -1,0 +1,246 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{listings}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\lstset{
+    language=Python,
+    basicstyle=\ttfamily\small,
+    breaklines=true,
+    captionpos=b
+}
+
+\title{Guía Detallada para Brandon Vilchis - Evaluador (Spoke1)}
+\author{Hackathon OpenAI - Smart Optimizer}
+\date{22 de octubre de 2025}
+
+\begin{document}
+
+\maketitle
+
+\section{Rol: Brandon Vilchis - Evaluador (Spoke1)}
+Eres el responsable de analizar la complejidad de las tareas entrantes. Tu objetivo es determinar si una tarea es \textit{baja}, \textit{media} o \textit{alta} complejidad, basándote en factores como longitud, keywords y patrones. Esto guía la selección del modelo LLM (GPT-3.5 para baja, GPT-4 para alta).
+
+\section{Cronograma y Tareas Detalladas}
+
+\subsection{8:00-9:15: Setup Inicial}
+- Asigna rol como Spoke1 (Evaluador).
+- Revisa stubs en \texttt{src/nodos/evaluar\_complejidad.py}.
+- Configura entorno: instala dependencias, prueba acceso a APIs.
+- Colabora con hub para confirmar plan.
+
+Pseudocódigo:
+\begin{lstlisting}
+# Función de setup para el evaluador
+# PASO 1: Revisar el archivo de stubs para entender la estructura base
+revisar_archivo("src/nodos/evaluar_complejidad.py")  # Leer y entender el código existente
+
+# PASO 2: Configurar el entorno de desarrollo
+instalar_dependencias("requirements.txt")  # Instalar paquetes de Python necesarios
+probar_api_openai()  # Verificar que la API de OpenAI funcione con credenciales
+
+# PASO 3: Asignar rol y confirmar
+asignar_rol("Evaluador")  # Establecer rol como Spoke1
+reportar_a_hub("Setup completado: entorno configurado, stubs revisados")  # Notificar al hub
+\end{lstlisting}
+
+\subsection{9:15-12:00: Implementación Inicial}
+- Implementa lógica de evaluación en \texttt{evaluar\_complejidad.py}.
+- Define función que toma tarea (string) y retorna dict con complejidad.
+- Factores: longitud (>100 chars = alta), keywords (ej: "complejo", "avanzado"), patrones (preguntas vs comandos).
+- Prueba con ejemplos hardcoded.
+
+Pseudocódigo:
+\begin{lstlisting}
+def evaluar_complejidad(tarea: str) -> dict:
+    # Calcular longitud
+    longitud = len(tarea)
+    
+    # Buscar keywords de complejidad
+    keywords_alta = ["complejo", "avanzado", "técnico", "matemático"]
+    keywords_baja = ["simple", "básico", "fácil"]
+    
+    conteo_alta = sum(1 for kw in keywords_alta if kw in tarea.lower())
+    conteo_baja = sum(1 for kw in keywords_baja if kw in tarea.lower())
+    
+    # Determinar complejidad
+    if longitud > 200 or conteo_alta > 0:
+        complejidad = "alta"
+    elif longitud < 50 or conteo_baja > 0:
+        complejidad = "baja"
+    else:
+        complejidad = "media"
+    
+    # Retornar dict
+    return {
+        "complejidad": complejidad,
+        "factores": {
+            "longitud": longitud,
+            "keywords_alta": conteo_alta,
+            "keywords_baja": conteo_baja
+        }
+    }
+
+# Pruebas
+ejemplos = ["¿Qué es 2+2?", "Explica la relatividad general"]
+for tarea in ejemplos:
+    resultado = evaluar_complejidad(tarea)
+    print(resultado)
+\end{lstlisting}
+
+\subsection{12:00-13:00: Break y Revisión}
+- Discute progreso con equipo.
+- Ajusta lógica si necesario (ej: agregar más keywords).
+- Reporta a hub qué funciona/no.
+
+Pseudocódigo:
+\begin{lstlisting}
+def revision_break():
+    # Discutir con equipo
+    progreso = "Implementación inicial completada"
+    problemas = []  # Lista vacía si todo bien
+    
+    # Reportar
+    reportar_a_hub(progreso, problemas)
+    
+    # Ajustes
+    if "necesita_keywords" in problemas:
+        agregar_keywords(["nuevo_kw"])
+\end{lstlisting}
+
+\subsection{13:00-15:00: Integración y Refinamiento}
+- Ayuda en validación si Spoke2 necesita.
+- Refina evaluación: integra feedback de testing.
+- Asegura que output sea dict compatible con LangGraph.
+
+Pseudocódigo:
+\begin{lstlisting}
+def refinar_evaluacion(feedback: dict):
+    # Ajustar basado en feedback
+    if feedback.get("mejorar_longitud"):
+        ajustar_umbral_longitud(150)
+    
+    # Re-evaluar ejemplos
+    for tarea in ejemplos_test:
+        nuevo_resultado = evaluar_complejidad(tarea)
+        validar_con_feedback(nuevo_resultado, feedback)
+\end{lstlisting}
+
+\subsection{15:00-17:00: Testing y Métricas}
+- Crea casos de prueba para evaluación.
+- Mide accuracy de complejidad (vs esperado).
+- Colabora en tests end-to-end.
+
+Pseudocódigo:
+\begin{lstlisting}
+def testing_evaluacion():
+    casos_prueba = [
+        {"tarea": "Hola", "esperado": "baja"},
+        {"tarea": "Explica machine learning avanzado", "esperado": "alta"}
+    ]
+    
+    accuracy = 0
+    for caso in casos_prueba:
+        resultado = evaluar_complejidad(caso["tarea"])
+        if resultado["complejidad"] == caso["esperado"]:
+            accuracy += 1
+    
+    accuracy /= len(casos_prueba)
+    print(f"Accuracy evaluación: {accuracy}")
+\end{lstlisting}
+
+\subsection{17:00-18:00: Documentación y Demo}
+- Actualiza docs con lógica de evaluación.
+- Ayuda en demo: explica cómo evalúa complejidad.
+
+Pseudocódigo:
+\begin{lstlisting}
+def documentar_evaluacion():
+    # Actualizar README
+    agregar_seccion_readme("Evaluación: longitud + keywords")
+    
+    # Preparar demo
+    demo_evaluacion = evaluar_complejidad("Tarea de ejemplo")
+    grabar_video(demo_evaluacion)
+\end{lstlisting}
+
+\subsection{18:00: Entrega Final}
+- Verifica código subido a GitHub.
+- Confirma cumplimiento (solo lógica implementada en evento).
+
+\section{Referencia para Implementación Correcta}
+Esta sección es una guía para traducir el pseudocódigo a código Python real. Un agente de IA debe seguir estos pasos exactamente para implementar el rol de Evaluador de manera correcta y compatible con el proyecto Smart Optimizer.
+
+\subsection{Pasos Generales para Implementar Código}
+1. **Entender el Pseudocódigo**: Cada bloque de pseudocódigo describe algoritmos paso a paso. Tradúcelo a funciones Python válidas, usando bibliotecas como `openai` para APIs.
+2. **Usar Bibliotecas Correctas**: Importa `openai` para llamadas a LLM, `os` para variables de entorno, y estructuras de datos nativas (dict, list).
+3. **Compatibilidad con LangGraph**: Todas las funciones deben retornar dicts compatibles con el estado del grafo (AgentState). No uses prints en producción; registra logs si es necesario.
+4. **Manejo de Errores**: Agrega try-except para llamadas a API (ej: rate limits). Si falla, retorna dict con error.
+5. **Testing**: Después de implementar, ejecuta pruebas con datos reales. Mide accuracy y ajusta thresholds.
+6. **Mejores Prácticas**: Código legible, comentado, modular. Evita hardcode; usa variables para thresholds.
+
+\subsection{Ejemplo de Traducción: Función evaluar_complejidad}
+Del pseudocódigo:
+\begin{lstlisting}
+def evaluar_complejidad(tarea: str) -> dict:
+    # Calcular longitud
+    longitud = len(tarea)
+    # ... (resto del pseudocódigo)
+\end{lstlisting}
+
+**Código Real**:
+\begin{lstlisting}
+import os
+from typing import Dict
+
+def evaluar_complejidad(tarea: str) -> Dict[str, any]:
+    """
+    Evalúa la complejidad de una tarea basada en longitud y keywords.
+    Retorna un dict compatible con LangGraph.
+    """
+    try:
+        # Calcular longitud
+        longitud = len(tarea)
+        
+        # Keywords (puedes expandir esta lista)
+        keywords_alta = ["complejo", "avanzado", "técnico", "matemático"]
+        keywords_baja = ["simple", "básico", "fácil"]
+        
+        # Contar keywords
+        conteo_alta = sum(1 for kw in keywords_alta if kw in tarea.lower())
+        conteo_baja = sum(1 for kw in keywords_baja if kw in tarea.lower())
+        
+        # Lógica de complejidad (ajusta thresholds según testing)
+        if longitud > 200 or conteo_alta > 0:
+            complejidad = "alta"
+        elif longitud < 50 or conteo_baja > 0:
+            complejidad = "baja"
+        else:
+            complejidad = "media"
+        
+        # Retornar dict estructurado
+        return {
+            "complejidad": complejidad,
+            "factores": {
+                "longitud": longitud,
+                "keywords_alta": conteo_alta,
+                "keywords_baja": conteo_baja
+            }
+        }
+    except Exception as e:
+        # Manejo de errores
+        return {"error": str(e), "complejidad": "desconocida"}
+\end{lstlisting}
+
+**Instrucciones para AI**: Implementa esta función en `src/nodos/evaluar_complejidad.py`. Prueba con inputs como "Explica quantum computing" (debe retornar "alta"). Si accuracy <80\% en tests, ajusta keywords o thresholds. Integra en LangGraph como nodo que actualiza el estado con "complejidad".
+
+\subsection{Otras Funciones Clave}
+- **Setup**: Usa `os.getenv("OPENAI_API_KEY")` para credenciales. No hardcode keys.
+- **Testing**: Crea un script separado `test_evaluador.py` con unittest o pytest.
+- **Integración**: En `src/agente.py`, importa y llama `evaluar_complejidad(state["tarea"])`.
+
+Siguiendo esto, el código será funcional, seguro y optimizado para el hackathon.
+
+\end{document}
