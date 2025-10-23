@@ -233,52 +233,23 @@ class SmartOptimizerAgent:
         print(f"   Tokens consumidos: {tokens2}")
         print(f"   Ruta tomada: {resultado2.get('ruta', 'N/A')}")
         
-        # ========== COMPARACIÓN FINAL Y CÁLCULO DE AHORRO ==========
-        print("\n" + "="*70)
-        print("📈 COMPARACIÓN FINAL - AUTOMEJORA DEMOSTRADA")
-        print("="*70)
+        # ========== COMPARACIÓN FINAL CON VISUALIZADOR AVANZADO ==========
         
         if tokens1 > 0 and tokens2 > 0:
-            # 🆕 Obtener costos reales en USD
-            costo1 = metricas1.get("costo_total", 0)
-            costo2 = metricas2.get("costo_total", 0)
-            latencia1 = metricas1.get("latencia", 0)
-            latencia2 = metricas2.get("latencia", 0)
+            # Importar visualizador
+            from src.visualizador import mostrar_comparacion_run1_vs_run2
             
-            # Calcular ahorros
-            ahorro_tokens = tokens1 - tokens2
-            ahorro_costo = costo1 - costo2
-            ahorro_latencia = latencia1 - latencia2
-            
-            porcentaje_ahorro_tokens = (ahorro_tokens / tokens1) * 100 if tokens1 > 0 else 0
-            porcentaje_ahorro_costo = (ahorro_costo / costo1) * 100 if costo1 > 0 else 0
-            
-            print(f"\n🎯 Impacto de la automejora:")
-            print(f"   Run 1 (inocente): {tokens1} tokens, ${costo1:.6f}, {latencia1:.3f}s con {modelo1}")
-            print(f"   Run 2 (optimizado): {tokens2} tokens, ${costo2:.6f}, {latencia2:.3f}s con {modelo2}")
-            print(f"\n   💰 Ahorro en COSTOS: ${ahorro_costo:.6f} ({porcentaje_ahorro_costo:.1f}%)")
-            print(f"   📦 Ahorro en tokens: {ahorro_tokens} ({porcentaje_ahorro_tokens:.1f}%)")
-            print(f"   ⚡ Diferencia latencia: {ahorro_latencia:.3f}s")
-            
-            # 🆕 Usar ahorro en COSTOS como métrica principal
-            if porcentaje_ahorro_costo > 50:
-                print(f"\n🏆 ¡ÉXITO! Automejora de {porcentaje_ahorro_costo:.0f}% en costos")
-                print("   Este es el diferenciador clave vs otros equipos")
-            elif porcentaje_ahorro_costo > 0:
-                print(f"\n✅ Optimización lograda: {porcentaje_ahorro_costo:.0f}% ahorro en costos")
-            else:
-                print(f"\n💡 Tokens aumentaron pero COSTO bajó {abs(porcentaje_ahorro_costo):.0f}%")
-                print("   Modelo más barato compensa con más tokens → ¡Sigue siendo ganancia!")
+            # Mostrar visualización avanzada con todas las métricas
+            mostrar_comparacion_run1_vs_run2(
+                metricas1=metricas1,
+                metricas2=metricas2,
+                modelo1=modelo1,
+                modelo2=modelo2,
+                ruta1=resultado1.get('ruta', 'default'),
+                ruta2=resultado2.get('ruta', 'optimizada')
+            )
         else:
-            print("\n⚠️  No se pudieron calcular ahorros (falta de métricas)")
-        
-        print("\n" + "="*70)
-        print("🎤 NARRATIVA PARA JUECES:")
-        print("   'Nuestro sistema APRENDE de cada ejecución.'")
-        print("   'Run 1 usa modelo caro → Auditor detecta desperdicio'")
-        print("   '→ Memoria se actualiza → Run 2 usa modelo optimizado'")
-        print("   '→ Resultado: 87% de ahorro SIN perder calidad'")
-        print("="*70 + "\n")
+            print("\n⚠️  No se pudieron calcular comparaciones (falta de métricas)")
 
 
 # Para testing rápido durante el hackathon

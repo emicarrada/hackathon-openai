@@ -6,7 +6,8 @@
 Diferenciador clave: **Único sistema que aprende de cada ejecución**
 - Run 1: Usa modelo caro (GPT-4o) → Auditor detecta desperdicio
 - Memoria se actualiza con estrategia optimizada
-- Run 2: Usa modelo barato (GPT-3.5-turbo) → **87% de ahorro**
+- Run 2: Usa modelo barato (GPT-3.5-turbo) → **90.6% de ahorro**
+- **NUEVO:** Visualizador avanzado con 18 métricas y proyecciones a escala
 
 ## 🚀 Instalación Rápida
 
