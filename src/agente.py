@@ -15,7 +15,7 @@ PRE-EVENTO: Solo stubs y estructura. Nada funcional.
 from langgraph.graph import StateGraph, END
 from typing import TypedDict
 from nodos.evaluar_complejidad import evaluar_complejidad
-from nodos.generar_refinar import generar_refinar
+from nodos.generar_refinar import generar_y_refinar
 from nodos.validar_calidad import validar_calidad
 
 class SmartOptimizerAgent:
@@ -29,7 +29,7 @@ class SmartOptimizerAgent:
 
     def __init__(self):
         """Inicializa el agente con configuración básica."""
-        self.modelo_default = "gpt-3.5-turbo"  # Placeholder
+        self.modelo_default = "gpt-4o-mini"  # Modelo económico por defecto
         self.memoria = {}  # Placeholder para memoria JSON
 
     def evaluar_complejidad(self, tarea: str) -> dict:
@@ -104,6 +104,8 @@ class AgentState(TypedDict):
     complejidad: dict
     respuesta: str
     validacion: dict
+    modelo_usado: str
+    metricas: dict
 
 
 # Funciones de nodos para LangGraph (llaman a stubs)
@@ -116,15 +118,23 @@ def nodo_evaluar(state: AgentState) -> AgentState:
 def nodo_generar(state: AgentState) -> AgentState:
     """Nodo 2: Generar y refinar."""
     modelo = state["complejidad"]["modelo"]
-    state["respuesta"] = generar_refinar(state["tarea"], modelo=modelo)
+    state["respuesta"] = generar_y_refinar(state["tarea"], modelo=modelo)
     return state
 
 
 def nodo_validar(state: AgentState) -> AgentState:
     """Nodo 3: Validar calidad."""
-    # Baseline placeholder
-    baseline = "Respuesta baseline placeholder"
-    state["validacion"] = validar_calidad(state["respuesta"], baseline)
+    # Generar baseline con GPT-4 para comparar
+    # O usar la respuesta existente si ya hay una
+    state["validacion"] = validar_calidad(
+        respuesta=state["respuesta"],
+        baseline=None,  # Se generará automáticamente con GPT-4
+        tarea=state["tarea"]
+    )
+    # Guardar modelo usado
+    state["modelo_usado"] = state["complejidad"]["modelo"]
+    # Guardar métricas de validación
+    state["metricas"] = state["validacion"].get("metricas", {})
     return state
 
 

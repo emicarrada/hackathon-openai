@@ -1,8 +1,8 @@
 {
   "estrategias": {
-    "baja": "gpt-4o-mini",
-    "media": "gpt-4o",
-    "alta": "gpt-4o"
+    "baja": "gpt-3.5-turbo",
+    "media": "gpt-4-turbo",
+    "alta": "gpt-4-turbo"
   },
-  "notas": "Configuración optimizada usando modelos gpt-4o disponibles"
+  "notas": "Estrategias iniciales basadas en complejidad. Se actualizarán durante el evento con aprendizaje real."
 }
