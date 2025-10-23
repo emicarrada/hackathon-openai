@@ -14,9 +14,9 @@ PRE-EVENTO: Solo stubs y estructura. Nada funcional.
 
 from langgraph.graph import StateGraph, END
 from typing import TypedDict
-from nodos.evaluar_complejidad import evaluar_complejidad
-from nodos.generar_refinar import generar_y_refinar
-from nodos.validar_calidad import validar_calidad
+from src.nodos.evaluar_complejidad import evaluar_complejidad
+from src.nodos.generar_refinar import generar_y_refinar
+from src.nodos.validar_calidad import validar_calidad
 
 class SmartOptimizerAgent:
     """
