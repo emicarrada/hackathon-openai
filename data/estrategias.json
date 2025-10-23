@@ -1,8 +1,8 @@
 {
   "estrategias": {
-    "baja": "gpt-3.5-turbo",
-    "media": "gpt-4-turbo",
-    "alta": "gpt-4-turbo"
+    "baja": "gpt-4o-mini",
+    "media": "gpt-4o",
+    "alta": "gpt-4.1"
   },
-  "notas": "Estrategias iniciales basadas en complejidad. Se actualizarán durante el evento con aprendizaje real."
+  "notas": "Estrategias actualizadas para aprovechar modelos GPT-4o y GPT-4.1. gpt-4o-mini es más moderno y eficiente que gpt-3.5-turbo. Se actualizarán con aprendizaje real durante el evento."
 }

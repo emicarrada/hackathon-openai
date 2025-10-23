@@ -1,0 +1,22 @@
+{
+  "estrategias_opcion_1": {
+    "descripcion": "Si tienes gpt-4o-mini, gpt-4o, gpt-4.1 (como Cristopher)",
+    "baja": "gpt-4o-mini",
+    "media": "gpt-4o",
+    "alta": "gpt-4.1"
+  },
+  "estrategias_opcion_2": {
+    "descripcion": "Si solo tienes gpt-3.5-turbo (cuenta básica)",
+    "baja": "gpt-3.5-turbo",
+    "media": "gpt-3.5-turbo",
+    "alta": "gpt-3.5-turbo",
+    "nota": "Usa el mismo modelo pero con diferentes configuraciones de temperature/max_tokens"
+  },
+  "estrategias_opcion_3": {
+    "descripcion": "Si tienes gpt-3.5 y gpt-4 (cuenta con acceso a GPT-4)",
+    "baja": "gpt-3.5-turbo",
+    "media": "gpt-4",
+    "alta": "gpt-4"
+  },
+  "notas": "Ejecuta diagnostico_modelos.py para determinar qué opción usar. Luego actualiza data/estrategias.json con la configuración correcta."
+}
