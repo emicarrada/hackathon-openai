@@ -263,6 +263,10 @@ class SmartOptimizerAgent:
         print("   '→ Memoria se actualiza → Run 2 usa modelo optimizado'")
         print("   '→ Resultado: 87% de ahorro SIN perder calidad'")
         print("="*70 + "\n")
+            # Guardar métricas como atributos de instancia (para la demo)
+        self.metricas_run1 = metricas1
+        self.metricas_run2 = metricas2
+
 
 
 # Para testing rápido durante el hackathon
