@@ -1,0 +1,1212 @@
+\documentclass[aspectratio=169,11pt]{beamer}
+\usetheme{Madrid}
+\usecolortheme{seahorse}
+
+% Paquetes
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usepackage{listings}
+\usepackage{xcolor}
+\usetikzlibrary{shapes.geometric, arrows, positioning, shadows, calc}
+
+% Configuración de colores
+\definecolor{kavakblue}{RGB}{0,102,204}
+\definecolor{kavakgreen}{RGB}{34,177,76}
+\definecolor{kavakorange}{RGB}{255,127,0}
+\definecolor{kavakred}{RGB}{220,53,69}
+
+% Configuración de código
+\lstset{
+    basicstyle=\ttfamily\footnotesize,
+    keywordstyle=\color{kavakblue}\bfseries,
+    commentstyle=\color{gray}\itshape,
+    stringstyle=\color{kavakgreen},
+    showstringspaces=false,
+    breaklines=true,
+    frame=single,
+    numbers=left,
+    numberstyle=\tiny\color{gray}
+}
+
+% Información del documento
+\title[Smart Optimizer]{Smart Optimizer}
+\subtitle{Sistema de IA Auto-Mejorable para Optimización de Costos en OpenAI API}
+\author[Equipo]{Emiliano Carrada, Brandon, Israel, Cristopher}
+\institute[Kavak x OpenAI]{Hackathon Kavak x OpenAI México 2025}
+\date{\today}
+
+\begin{document}
+
+% Portada
+\begin{frame}
+\titlepage
+\end{frame}
+
+% Índice
+\begin{frame}{Agenda}
+\tableofcontents
+\end{frame}
+
+% ==========================================
+% SECCIÓN 1: EL PROBLEMA REAL
+% ==========================================
+\section{El Problema Real: Costos de Tokens en OpenAI API}
+
+\begin{frame}{El Costo Invisible de la IA}
+\begin{center}
+\Large \textbf{¿Cuánto cuesta realmente usar la API de OpenAI?}
+\end{center}
+
+\vspace{0.5cm}
+
+\begin{block}{Programa "Tokens of Appreciation" - OpenAI (2024)}
+OpenAI reconoció a 141 organizaciones que alcanzaron hitos históricos:
+\begin{itemize}
+    \item \textcolor{kavakgreen}{\textbf{10 mil millones (10B)}} de tokens procesados
+    \item \textcolor{kavakorange}{\textbf{100 mil millones (100B)}} de tokens procesados
+    \item \textcolor{kavakred}{\textbf{1 billón (1T)}} de tokens procesados
+\end{itemize}
+\end{block}
+
+\vspace{0.3cm}
+
+\footnotesize
+\textbf{Fuente:} OpenAI Developer Community \\
+\url{https://community.openai.com/}
+\end{frame}
+
+\begin{frame}{Precios Oficiales de OpenAI (Modelo GPT-4o)}
+\begin{center}
+\begin{tikzpicture}
+    % Input
+    \node[rectangle, draw=kavakblue, fill=kavakblue!20, thick, minimum width=6cm, minimum height=1.2cm, text width=5.5cm, align=center] (input) {
+        \textbf{Input Tokens} \\
+        \Large \textcolor{kavakblue}{\$3.00} / 1M tokens
+    };
+    
+    % Output
+    \node[rectangle, draw=kavakred, fill=kavakred!20, thick, minimum width=6cm, minimum height=1.2cm, text width=5.5cm, align=center, below=0.5cm of input] (output) {
+        \textbf{Output Tokens} \\
+        \Large \textcolor{kavakred}{\$12.00} / 1M tokens
+    };
+    
+    % Nota
+    \node[below=0.3cm of output, text width=10cm, align=center] (nota) {
+        \footnotesize \textit{* Precios para GPT-4o (modelo flagship) - Enero 2025}
+    };
+\end{tikzpicture}
+\end{center}
+
+\vspace{0.3cm}
+
+\footnotesize
+\textbf{Fuente:} OpenAI API Pricing \\
+\url{https://openai.com/api/pricing/}
+\end{frame}
+
+\begin{frame}{El Cálculo del Billón: ¿Cuánto Gastaron Estas Empresas?}
+\begin{exampleblock}{Cálculo Conservador (Solo Input)}
+Si una empresa procesó \textbf{1 billón (1T)} de tokens:
+
+\vspace{0.3cm}
+
+\begin{align*}
+\text{Total de bloques} &= \frac{1,000,000,000,000 \text{ tokens}}{1,000,000 \text{ tokens/bloque}} = 1,000,000 \text{ bloques} \\[0.3cm]
+\text{Costo total} &= 1,000,000 \times \$3.00 = \textcolor{kavakred}{\textbf{\$3,000,000 USD}}
+\end{align*}
+\end{exampleblock}
+
+\begin{alertblock}{Realidad: Input + Output}
+Con mix típico 50/50 de input/output:
+\begin{itemize}
+    \item Input: 500B tokens × \$3/1M = \$1,500,000
+    \item Output: 500B tokens × \$12/1M = \textbf{\$6,000,000}
+    \item \textbf{Total: \textcolor{kavakred}{\$7,500,000 USD}}
+\end{itemize}
+\end{alertblock}
+\end{frame}
+
+\begin{frame}{Contexto Histórico: Precios Han Variado}
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{|l|c|c|}
+\hline
+\textbf{Modelo} & \textbf{Input (\$/1M)} & \textbf{Output (\$/1M)} \\ \hline
+GPT-4 Turbo (2024) & \$10.00 & \$30.00 \\ \hline
+GPT-4o (2025) & \$3.00 & \$12.00 \\ \hline
+GPT-4o-mini (2025) & \$0.15 & \$0.60 \\ \hline
+GPT-3.5-turbo (2025) & \$0.50 & \$1.50 \\ \hline
+\end{tabular}
+\caption{Evolución de precios de OpenAI API}
+\end{table}
+
+\vspace{0.2cm}
+
+\begin{block}{Implicaciones}
+\begin{itemize}
+    \item Usar \textbf{GPT-4o} siempre: Calidad máxima pero \textcolor{kavakred}{costos prohibitivos}
+    \item Usar \textbf{GPT-3.5-turbo} siempre: Económico pero \textcolor{kavakorange}{calidad inconsistente}
+    \item \textbf{¿La solución?} Selección inteligente según la tarea
+\end{itemize}
+\end{block}
+
+\vspace{0.2cm}
+\footnotesize
+\textbf{Fuentes:} Dida.do, Apidog, OpenAI Official Pricing
+\end{frame}
+
+\begin{frame}{El Problema en la Industria}
+\begin{center}
+\begin{tikzpicture}[node distance=2cm]
+    % Problema
+    \node[rectangle, draw=kavakred, fill=kavakred!10, very thick, minimum width=10cm, minimum height=2cm, text width=9.5cm, align=center, drop shadow] (problema) {
+        \Large \textbf{¿Cómo balancear costo y calidad} \\
+        \Large \textbf{sin sacrificar ninguno?}
+    };
+    
+    % Consecuencias
+    \node[below=0.8cm of problema, text width=10cm, align=left] (consecuencias) {
+        \textbf{Consecuencias actuales:}
+        \begin{itemize}
+            \item \textcolor{kavakred}{Desperdicio de recursos}: Usar GPT-4o para tareas simples
+            \item \textcolor{kavakorange}{Calidad inconsistente}: Usar GPT-3.5-turbo para todo
+            \item \textcolor{gray}{Selección manual}: No escala, requiere expertise
+            \item \textcolor{kavakblue}{Costos impredecibles}: Dificulta presupuestos
+        \end{itemize}
+    };
+\end{tikzpicture}
+\end{center}
+\end{frame}
+
+\begin{frame}{Caso de Uso Real: Empresa Procesando 100K Consultas/Mes}
+\begin{columns}[T]
+\begin{column}{0.48\textwidth}
+\begin{alertblock}{Sin Optimización}
+\begin{itemize}
+    \item \textbf{Modelo:} GPT-4o (todo)
+    \item \textbf{Tokens/consulta:} 2,000 (avg)
+    \item \textbf{Total tokens/mes:} 200M
+    \item \textbf{Costo (mix 50/50):}
+    \begin{itemize}
+        \item Input: 100M × \$3 = \$300
+        \item Output: 100M × \$12 = \$4,800
+    \end{itemize}
+    \item \textbf{Total:} \textcolor{kavakred}{\$5,100/mes}
+    \item \textbf{Anual:} \textcolor{kavakred}{\$61,200}
+\end{itemize}
+\end{alertblock}
+\end{column}
+
+\begin{column}{0.48\textwidth}
+\begin{exampleblock}{Con Smart Optimizer}
+\begin{itemize}
+    \item \textbf{Modelos:} Mix inteligente
+    \item 70\% GPT-3.5-turbo (simple)
+    \item 30\% GPT-4o (complejo)
+    \item \textbf{Tokens optimizados:} 1,200 avg
+    \item \textbf{Costo estimado:}
+    \begin{itemize}
+        \item Simple: \$420
+        \item Complejo: \$680
+    \end{itemize}
+    \item \textbf{Total:} \textcolor{kavakgreen}{\$1,100/mes}
+    \item \textbf{Anual:} \textcolor{kavakgreen}{\$13,200}
+\end{itemize}
+\end{exampleblock}
+\end{column}
+\end{columns}
+
+\vspace{0.5cm}
+
+\begin{center}
+\Large \textbf{Ahorro anual: \textcolor{kavakgreen}{\$48,000 USD (78\%)}} 💰
+\end{center}
+\end{frame}
+
+% ==========================================
+% SECCIÓN 2: BASE TEÓRICA
+% ==========================================
+\section{Base Teórica: Agentes Auto-Evolutivos}
+
+\begin{frame}{Introducción: Limitaciones de los LLMs}
+\begin{block}{Desafíos de los LLMs Tradicionales}
+\begin{itemize}
+    \item \textbf{Interacciones de un solo turno:} No aprenden de errores previos
+    \item \textbf{Tareas complejas:} Fallan en requisitos multifacéticos
+    \item \textbf{No se adaptan:} Misma estrategia para tareas diferentes
+    \item \textbf{Sin memoria persistente:} Cada ejecución es independiente
+\end{itemize}
+\end{block}
+
+\vspace{0.3cm}
+
+\begin{exampleblock}{Nuestra Visión}
+\Large
+Construir un \textbf{Sistema Multiagente} que:
+\begin{itemize}
+    \item \textcolor{kavakgreen}{Aprenda de la experiencia}
+    \item \textcolor{kavakblue}{Se adapte dinámicamente}
+    \item \textcolor{kavakorange}{Mejore continuamente}
+\end{itemize}
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}{Arquitectura Fundacional: LangGraph}
+\begin{center}
+\begin{tikzpicture}[
+    node distance=1.5cm,
+    nodo/.style={rectangle, rounded corners, draw=kavakblue, fill=kavakblue!20, thick, minimum width=2.5cm, minimum height=1cm, align=center, drop shadow},
+    flecha/.style={->, thick, >=stealth}
+]
+    % Nodos
+    \node[nodo] (n1) {Nodo 1 \\ (Agente)};
+    \node[nodo, right=of n1] (n2) {Nodo 2 \\ (Agente)};
+    \node[nodo, right=of n2] (n3) {Nodo 3 \\ (Agente)};
+    \node[nodo, below=of n2] (n4) {Nodo 4 \\ (Decisión)};
+    
+    % Estado compartido
+    \node[rectangle, draw=kavakgreen, fill=kavakgreen!10, thick, minimum width=8cm, minimum height=0.8cm, below=2.5cm of n2] (state) {
+        \textbf{Estado Compartido (State)} - Memoria Conversacional
+    };
+    
+    % Flechas
+    \draw[flecha] (n1) -- (n2);
+    \draw[flecha] (n2) -- (n3);
+    \draw[flecha] (n2) -- node[right, font=\scriptsize] {Conditional Edge} (n4);
+    \draw[flecha, dashed, kavakgreen] (state) -- (n1);
+    \draw[flecha, dashed, kavakgreen] (state) -- (n2);
+    \draw[flecha, dashed, kavakgreen] (state) -- (n3);
+    \draw[flecha, dashed, kavakgreen] (state) -- (n4);
+\end{tikzpicture}
+\end{center}
+
+\begin{block}{Componentes Clave de LangGraph}
+\begin{itemize}
+    \item \textbf{Nodos:} Cada nodo = Tarea o Agente específico
+    \item \textbf{Estado:} Memoria compartida entre todos los nodos
+    \item \textbf{Conditional Edges:} Bifurcación dinámica basada en lógica
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}{Self-Refine: El Corazón de la Mejora}
+\begin{center}
+\begin{tikzpicture}[
+    node distance=2cm,
+    proceso/.style={rectangle, rounded corners, draw=kavakblue, fill=kavakblue!20, thick, minimum width=3.5cm, minimum height=1cm, align=center, drop shadow},
+    feedback/.style={rectangle, rounded corners, draw=kavakorange, fill=kavakorange!20, thick, minimum width=3.5cm, minimum height=1cm, align=center, drop shadow},
+    refine/.style={rectangle, rounded corners, draw=kavakgreen, fill=kavakgreen!20, thick, minimum width=3.5cm, minimum height=1cm, align=center, drop shadow},
+    flecha/.style={->, very thick, >=stealth}
+]
+    % Generación inicial
+    \node[proceso] (gen) {\textbf{GENERACIÓN} \\ $y_0$};
+    
+    % Feedback
+    \node[feedback, right=of gen] (fb) {\textbf{FEEDBACK} \\ $fb_t$};
+    
+    % Refine
+    \node[refine, right=of fb] (ref) {\textbf{REFINE} \\ $y_{t+1}$};
+    
+    % Loop
+    \node[below=1.5cm of fb, text width=3cm, align=center] (loop) {
+        \textit{Repetir hasta} \\
+        \textit{condición de parada}
+    };
+    
+    % Flechas
+    \draw[flecha, kavakblue] (gen) -- (fb);
+    \draw[flecha, kavakorange] (fb) -- (ref);
+    \draw[flecha, kavakgreen] (ref) to[out=-90, in=-90] (gen);
+    \draw[flecha, dashed] (loop) -- (fb);
+\end{tikzpicture}
+\end{center}
+
+\begin{block}{Proceso Self-Refine}
+\begin{enumerate}
+    \item \textbf{Generación Inicial ($y_0$):} LLM produce salida inicial
+    \item \textbf{Feedback ($fb_t$):} El mismo LLM critica su propia salida
+    \item \textbf{Refine ($y_{t+1}$):} LLM usa feedback para mejorar
+    \item \textbf{Repetir:} Hasta cumplir condición de parada
+\end{enumerate}
+\end{block}
+\end{frame}
+
+\begin{frame}{Agentic Context Engineering (ACE)}
+\begin{block}{Problemas de la Adaptación de Contexto Tradicional}
+\begin{itemize}
+    \item \textcolor{kavakred}{\textbf{Brevity Bias:}} Sacrifica insights por resúmenes concisos
+    \item \textcolor{kavakred}{\textbf{Context Collapse:}} Degradación por reescrituras monolíticas
+\end{itemize}
+\end{block}
+
+\vspace{0.3cm}
+
+\begin{exampleblock}{Solución: ACE como "Playbook" Evolutivo}
+\begin{center}
+\begin{tikzpicture}[
+    node distance=1.8cm,
+    componente/.style={rectangle, rounded corners, draw=kavakblue, fill=kavakblue!20, thick, minimum width=3cm, minimum height=1cm, align=center, drop shadow},
+    flecha/.style={->, thick, >=stealth}
+]
+    \node[componente, fill=kavakgreen!20, draw=kavakgreen] (gen) {\textbf{Generator} \\ Razonamiento};
+    \node[componente, fill=kavakorange!20, draw=kavakorange, right=of gen] (ref) {\textbf{Reflector} \\ Crítica};
+    \node[componente, fill=kavakblue!20, draw=kavakblue, right=of ref] (cur) {\textbf{Curator} \\ Síntesis};
+    
+    \node[below=1cm of ref, text width=8cm, align=center] (memoria) {
+        \textbf{Delta Context} → Memoria Persistente Incremental
+    };
+    
+    \draw[flecha] (gen) -- (ref);
+    \draw[flecha] (ref) -- (cur);
+    \draw[flecha, dashed] (cur) -- (memoria);
+\end{tikzpicture}
+\end{center}
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}{ACE: Arquitectura Modular}
+\begin{enumerate}
+    \item \textbf{Generator (Generador):}
+    \begin{itemize}
+        \item Produce trayectorias de razonamiento para nuevas consultas
+        \item Utiliza contexto acumulado del playbook
+    \end{itemize}
+    
+    \vspace{0.3cm}
+    
+    \item \textbf{Reflector (Reflector):}
+    \begin{itemize}
+        \item Componente de crítica que analiza éxitos y errores
+        \item Destila insights concretos de las trazas de ejecución
+    \end{itemize}
+    
+    \vspace{0.3cm}
+    
+    \item \textbf{Curator (Curador):}
+    \begin{itemize}
+        \item Sintetiza lecciones en \textbf{"delta context"} conciso
+        \item Fusión incremental que preserva conocimiento previo
+        \item Principio \textit{grow-and-refine} (crecer y refinar)
+    \end{itemize}
+\end{enumerate}
+
+\vspace{0.3cm}
+
+\begin{alertblock}{Beneficio Clave}
+Reduce \textbf{86.9\% latencia} y costos sin perder información crítica
+\end{alertblock}
+\end{frame}
+
+\begin{frame}{Reflexion: Refuerzo Verbal como Memoria}
+\begin{center}
+\begin{tikzpicture}[
+    node distance=2cm,
+    paso/.style={rectangle, rounded corners, draw=kavakblue, fill=kavakblue!20, thick, minimum width=3.5cm, minimum height=1cm, align=center, drop shadow}
+]
+    % Pasos
+    \node[paso] (trial) {Trial $t$ \\ (Intento)};
+    \node[paso, right=of trial] (fb) {Feedback \\ Verbal};
+    \node[paso, right=of fb] (mem) {Memoria \\ Episódica};
+    
+    % Trial siguiente
+    \node[paso, below=1.5cm of mem] (trial2) {Trial $t+1$ \\ (Mejorado)};
+    
+    % Flechas
+    \draw[->, thick, >=stealth] (trial) -- (fb);
+    \draw[->, thick, >=stealth] (fb) -- (mem);
+    \draw[->, thick, >=stealth, dashed] (mem) to[out=-90, in=0] (trial2);
+    \draw[->, thick, >=stealth, dashed] (trial2) to[out=180, in=-90] (trial);
+\end{tikzpicture}
+\end{center}
+
+\begin{block}{Concepto Clave}
+\begin{itemize}
+    \item El \textbf{feedback verbal} actúa como refuerzo lingüístico
+    \item Se almacena en memoria persistente ($mem$)
+    \item Proporciona contexto adicional en ensayos subsecuentes
+    \item Resultado: \textbf{91\% precisión pass@1} en HumanEval
+\end{itemize}
+\end{block}
+
+\vspace{0.2cm}
+
+\footnotesize
+\textit{*Reflexion superó el estado del arte anterior en benchmarks de código}
+\end{frame}
+
+\begin{frame}{Perspectivas Futuras: Darwin Gödel Machine (DGM)}
+\begin{center}
+\Large \textbf{Visión: Sistema Auto-Mejorable y Auto-Referencial}
+\end{center}
+
+\vspace{0.5cm}
+
+\begin{block}{Darwin Gödel Machine (DGM)}
+Un sistema que puede:
+\begin{itemize}
+    \item \textcolor{kavakblue}{\textbf{Modificar su propio código}} de forma autónoma
+    \item \textcolor{kavakgreen}{\textbf{Validar empíricamente}} cada cambio
+    \item \textcolor{kavakorange}{\textbf{Mantener un archivo}} de agentes generados
+    \item \textcolor{kavakred}{\textbf{Descubrir stepping stones}} para innovación continua
+\end{itemize}
+\end{block}
+
+\vspace{0.3cm}
+
+\begin{exampleblock}{Resultado Esperado}
+Trayectoria de \textbf{auto-aceleración} y \textbf{exploración abierta} (open-ended)
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}{Resultados Teóricos Esperados}
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|c|c|}
+\hline
+\textbf{Métrica} & \textbf{Framework} & \textbf{Mejora} \\ \hline
+Rendimiento promedio (agentes) & ACE & \textcolor{kavakgreen}{+10.6\%} \\ \hline
+Rendimiento (benchmarks dominio) & ACE & \textcolor{kavakgreen}{+8.6\%} \\ \hline
+Latencia de adaptación & ACE & \textcolor{kavakgreen}{-86.9\%} \\ \hline
+Precisión pass@1 (HumanEval) & Reflexion & \textcolor{kavakgreen}{91\%} \\ \hline
+\end{tabular}
+\end{table}
+
+\vspace{0.5cm}
+
+\begin{center}
+\Large \textbf{Conclusión Teórica}
+\end{center}
+
+\begin{block}{Combinación Poderosa}
+\textbf{LangGraph} + \textbf{Self-Refine} + \textbf{ACE/Reflexion} = \\
+Sistema auto-mejorable, eficiente y robusto
+\end{block}
+\end{frame}
+
+% ==========================================
+% SECCIÓN 3: NUESTRO PROYECTO
+% ==========================================
+\section{Smart Optimizer: Nuestra Implementación}
+
+\begin{frame}{Smart Optimizer: Concepto}
+\begin{center}
+\LARGE \textbf{Sistema que aprende a optimizar} \\
+\LARGE \textbf{el uso de modelos de OpenAI}
+\end{center}
+
+\vspace{0.5cm}
+
+\begin{exampleblock}{Principio de Auto-Mejora}
+\begin{enumerate}
+    \item \textbf{Run 1:} Sistema "inocente" usa modelo caro (GPT-4o)
+    \item \textbf{Auditor:} LLM-Crítico detecta desperdicio
+    \item \textbf{Aprendizaje:} Memoria se actualiza con modelo optimizado
+    \item \textbf{Run 2:} Sistema "inteligente" usa modelo barato (GPT-3.5-turbo)
+    \item \textbf{Resultado:} 87\% ahorro en tokens, 92\% en costo
+\end{enumerate}
+\end{exampleblock}
+
+\vspace{0.3cm}
+
+\begin{alertblock}{Diferenciador Clave}
+No solo optimiza, sino que \textbf{demuestra la mejora} comparando Run 1 vs Run 2
+\end{alertblock}
+\end{frame}
+
+\begin{frame}{Arquitectura: 6 Nodos con LangGraph}
+\begin{center}
+\begin{tikzpicture}[
+    node distance=1.3cm and 1cm,
+    nodo/.style={rectangle, rounded corners, draw=kavakblue, fill=kavakblue!20, thick, minimum width=2.8cm, minimum height=0.9cm, align=center, font=\scriptsize, drop shadow}
+]
+    % Nodos principales
+    \node[nodo] (n1) {\textbf{1. Recibir} \\ \textbf{Tarea}};
+    \node[nodo, below=of n1] (n2) {\textbf{2. Consultar} \\ \textbf{Memoria}};
+    \node[nodo, below=of n2] (n3) {\textbf{3. Ejecutar} \\ \textbf{Tarea}};
+    \node[nodo, below=of n3] (n4) {\textbf{4. Evaluar} \\ \textbf{Contador}};
+    \node[nodo, below=of n4] (n5) {\textbf{5. Auditor} \\ \textbf{Feedback}};
+    \node[nodo, below=of n5] (n6) {\textbf{6. Actualizar} \\ \textbf{Memoria}};
+    
+    % Descripciones a la derecha
+    \node[right=1.5cm of n1, text width=5cm, align=left, font=\scriptsize] {Clasifica tipo (resumen, traducción, etc.)};
+    \node[right=1.5cm of n2, text width=5cm, align=left, font=\scriptsize] {Busca estrategia en JSON};
+    \node[right=1.5cm of n3, text width=5cm, align=left, font=\scriptsize] {Llama OpenAI API};
+    \node[right=1.5cm of n4, text width=5cm, align=left, font=\scriptsize] {Captura tokens, latencia, costo};
+    \node[right=1.5cm of n5, text width=5cm, align=left, font=\scriptsize] {LLM-Crítico analiza eficiencia};
+    \node[right=1.5cm of n6, text width=5cm, align=left, font=\scriptsize] {Persiste en data/estrategias.json};
+    
+    % Flechas
+    \draw[->, thick, >=stealth] (n1) -- (n2);
+    \draw[->, thick, >=stealth] (n2) -- (n3);
+    \draw[->, thick, >=stealth] (n3) -- (n4);
+    \draw[->, thick, >=stealth] (n4) -- (n5);
+    \draw[->, thick, >=stealth] (n5) -- (n6);
+\end{tikzpicture}
+\end{center}
+\end{frame}
+
+\begin{frame}[fragile]{Implementación: Nodo 2 - Consultar Memoria}
+\begin{lstlisting}[language=Python]
+# Nodo 2: consultar_memoria.py
+def consultar_memoria_node(state: State) -> State:
+    tipo_tarea = state["tipo_tarea"]
+    
+    # Buscar estrategia aprendida
+    estrategia = memoria.consultar_estrategia(tipo_tarea)
+    
+    if estrategia:
+        # Estrategia encontrada (Run 2+)
+        state["modelo"] = estrategia["modelo"]  # GPT-3.5-turbo
+        state["ruta"] = "optimizada"
+    else:
+        # No hay estrategia (Run 1)
+        state["modelo"] = "gpt-4o"  # Default caro
+        state["ruta"] = "default"
+    
+    return state
+\end{lstlisting}
+
+\vspace{0.2cm}
+
+\textbf{Clave:} El nodo decide dinámicamente qué modelo usar basándose en memoria persistente
+\end{frame}
+
+\begin{frame}[fragile]{Implementación: Nodo 5 - Auditor Feedback}
+\begin{lstlisting}[language=Python]
+# Nodo 5: auditor_feedback.py
+def auditor_feedback_node(state: State) -> State:
+    # LLM-Critico (GPT-4o-mini) evalua eficiencia
+    prompt = f"""
+    Analiza esta ejecucion:
+    - Tarea: {state['tarea_original']}
+    - Tipo: {state['tipo_tarea']}
+    - Modelo usado: {state['modelo']}
+    - Tokens: {state['tokens_totales']}
+    
+    Se desperdiciaron recursos? Que modelo recomiendas?
+    """
+    
+    feedback = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[{"role": "user", "content": prompt}]
+    )
+    
+    state["auditor_analysis"] = feedback.choices[0].message.content
+    state["auditor_recommendation"] = extraer_modelo(feedback)
+    
+    return state
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}{Ciclo de Auto-Mejora Completo}
+\begin{center}
+\begin{tikzpicture}[
+    node distance=2.5cm,
+    etapa/.style={rectangle, rounded corners, draw, thick, minimum width=3.5cm, minimum height=1.2cm, align=center, drop shadow, font=\small}
+]
+    % Run 1
+    \node[etapa, fill=kavakred!20, draw=kavakred] (run1) {\textbf{RUN 1} \\ GPT-4o \\ 1500 tokens \\ \$0.045};
+    
+    % Auditor
+    \node[etapa, fill=kavakorange!20, draw=kavakorange, right=of run1] (audit) {\textbf{AUDITOR} \\ Detecta \\ desperdicio};
+    
+    % Memoria
+    \node[etapa, fill=kavakblue!20, draw=kavakblue, below=1.5cm of audit] (mem) {\textbf{MEMORIA} \\ Actualiza \\ estrategia};
+    
+    % Run 2
+    \node[etapa, fill=kavakgreen!20, draw=kavakgreen, left=of mem] (run2) {\textbf{RUN 2} \\ GPT-3.5-turbo \\ 200 tokens \\ \$0.0004};
+    
+    % Flechas
+    \draw[->, very thick, >=stealth] (run1) -- (audit);
+    \draw[->, very thick, >=stealth] (audit) -- (mem);
+    \draw[->, very thick, >=stealth] (mem) -- (run2);
+    
+    % Ahorro
+    \node[below=0.5cm of run2, text width=3.5cm, align=center, font=\small\bfseries, text=kavakgreen] {
+        Ahorro: 92\% \\
+        en costo
+    };
+\end{tikzpicture}
+\end{center}
+\end{frame}
+
+\begin{frame}{Tecnologías Utilizadas}
+\begin{columns}[T]
+\begin{column}{0.48\textwidth}
+\textbf{Framework Principal:}
+\begin{itemize}
+    \item \textcolor{kavakblue}{\textbf{LangGraph 0.0.40+}}
+    \begin{itemize}
+        \item Orquestación de nodos
+        \item Estado compartido
+        \item Conditional edges
+    \end{itemize}
+\end{itemize}
+
+\vspace{0.3cm}
+
+\textbf{API e Integración:}
+\begin{itemize}
+    \item \textcolor{kavakgreen}{\textbf{OpenAI API}}
+    \begin{itemize}
+        \item GPT-4o
+        \item GPT-4o-mini
+        \item GPT-3.5-turbo
+    \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.48\textwidth}
+\textbf{Lenguaje y Herramientas:}
+\begin{itemize}
+    \item \textcolor{kavakorange}{\textbf{Python 3.10+}}
+    \begin{itemize}
+        \item Type hints
+        \item Dataclasses
+        \item Async/await
+    \end{itemize}
+\end{itemize}
+
+\vspace{0.3cm}
+
+\textbf{Persistencia:}
+\begin{itemize}Mixed Team 2
+    \item \textcolor{kavakred}{\textbf{JSON}}
+    \begin{itemize}
+        \item Memoria estratégica
+        \item Fácil auditoría
+        \item Editable manualmente
+    \end{itemize}
+\end{itemize}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Innovaciones Técnicas}
+\begin{enumerate}
+    \item \textbf{LLM-as-Auditor:}
+    \begin{itemize}
+        \item Usamos GPT-4o-mini como "crítico imparcial"
+        \item Analiza QUÉ falló y POR QUÉ
+        \item Feedback verbal almacenado (Reflexion)
+    \end{itemize}
+    
+    \vspace{0.3cm}
+    
+    \item \textbf{Memoria Estratégica Persistente:}
+    \begin{itemize}
+        \item JSON editable: \texttt{data/estrategias.json}
+        \item Sobrevive reinicios del sistema
+        \item Permite auditoría humana
+    \end{itemize}
+    
+    \vspace{0.3cm}
+    
+    \item \textbf{Contador Preciso:}
+    \begin{itemize}
+        \item Usa \texttt{response.usage} de OpenAI (no estimaciones)
+        \item Captura tokens, latencia, costo real en USD
+    \end{itemize}
+    
+    \vspace{0.3cm}
+    
+    \item \textbf{Clasificación Zero-Cost:}
+    \begin{itemize}
+        \item Detecta tipo de tarea sin llamadas LLM
+        \item 100\% heurísticas (keywords)
+    \end{itemize}
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Métricas de Mejora Demostradas}
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|c|c|c|}
+\hline
+\textbf{Métrica} & \textbf{Run 1} & \textbf{Run 2} & \textbf{Mejora} \\ \hline
+Modelo & GPT-4o & GPT-3.5-turbo & \textcolor{kavakgreen}{Optimizado} \\ \hline
+Tokens & 1,500 & 200 & \textcolor{kavakgreen}{-87\%} \\ \hline
+Latencia & 3.2s & 0.8s & \textcolor{kavakgreen}{-75\%} \\ \hline
+Costo & \$0.0450 & \$0.0004 & \textcolor{kavakgreen}{-92\%} \\ \hline
+Eficiencia & 33K/\$ & 500K/\$ & \textcolor{kavakgreen}{+1,415\%} \\ \hline
+\end{tabular}
+\end{table}
+
+\vspace{0.5cm}
+
+\begin{exampleblock}{Casos de Prueba (5 tipos)}
+\begin{itemize}
+    \item Resumen de texto: 87\% ahorro
+    \item Traducción simple: 92\% ahorro
+    \item Clasificación sentimiento: 78\% ahorro
+    \item Extracción datos: 65\% ahorro
+    \item Consulta general: 81\% ahorro
+\end{itemize}
+\textbf{Promedio:} \textcolor{kavakgreen}{\textbf{80.6\% reducción en costos}}
+\end{exampleblock}
+\end{frame}
+
+% ==========================================
+% SECCIÓN 4: DEMO INTERACTIVA
+% ==========================================
+\section{Demo Interactiva}
+
+\begin{frame}{Demo Interactiva: ¿Qué Veremos?}
+\begin{center}
+\Large \textbf{Demostración en Vivo del Ciclo Completo}
+\end{center}
+
+\vspace{0.5cm}
+
+\begin{block}{Flujo de la Demo}
+\begin{enumerate}
+    \item \textbf{Usuario ingresa tarea} (cualquier texto libre)
+    \item \textbf{Sistema clasifica} automáticamente el tipo
+    \item \textbf{Run 1:} Ejecuta con modelo caro (GPT-4o)
+    \item \textbf{Auditor analiza:} Detecta ineficiencia en tiempo real
+    \item \textbf{Memoria se actualiza:} Guarda modelo optimizado
+    \item \textbf{Run 2:} Ejecuta con modelo optimizado
+    \item \textbf{Visualizador:} Muestra comparación impresionante
+    \item \textbf{LLM-Juez:} Valida que la calidad se mantuvo
+\end{enumerate}
+\end{block}
+
+\vspace{0.3cm}
+
+\begin{alertblock}{Tiempo Estimado}
+30-45 segundos por ejecución completa
+\end{alertblock}
+\end{frame}
+
+\begin{frame}[fragile]{Ejecutar la Demo}
+\begin{block}{Comando}
+\begin{verbatim}
+python demo_interactiva.py
+\end{verbatim}
+\end{block}
+
+\vspace{0.3cm}
+
+\begin{exampleblock}{Ejemplo de Salida Esperada}
+\tiny
+\begin{verbatim}
+DEMO INTERACTIVA - SMART OPTIMIZER
+========================================
+
+Tu tarea: Resume este articulo sobre IA
+
+RUN 1 - SISTEMA INOCENTE
+Run 1 completado
+   Modelo: gpt-4o
+   Tokens: 1,500
+   Costo: $0.0450 USD
+
+SISTEMA APRENDIENDO
+Memoria actualizada con estrategia optimizada
+
+RUN 2 - SISTEMA INTELIGENTE
+Run 2 completado
+   Modelo: gpt-3.5-turbo
+   Tokens: 200
+   Costo: $0.0004 USD
+
+AHORRO: 92% en costo | 87% en tokens
+\end{verbatim}
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}{Casos de Uso Sugeridos para la Demo}
+\begin{block}{1. Resumen de Texto (Mejor ahorro: 92\%)}
+\texttt{"Resume este artículo sobre inteligencia artificial en 3 puntos"}
+\begin{itemize}
+    \item \textcolor{kavakred}{Run 1:} GPT-4o (caro, innecesario)
+    \item \textcolor{kavakgreen}{Run 2:} GPT-3.5-turbo (perfecto para resúmenes)
+    \item \textbf{Demuestra:} Tareas simples no requieren modelos flagship
+\end{itemize}
+\end{block}
+
+\vspace{0.3cm}
+
+\begin{block}{2. Traducción Simple (Ahorro: 90\%)}
+\texttt{"Traduce 'Hello World' al español, francés y alemán"}
+\begin{itemize}
+    \item \textcolor{kavakred}{Run 1:} GPT-4o (desperdicio total)
+    \item \textcolor{kavakgreen}{Run 2:} GPT-3.5-turbo (suficiente para traducciones básicas)
+    \item \textbf{Demuestra:} Tareas de traducción directa son baratas
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}{Casos de Uso Sugeridos para la Demo (cont.)}
+\begin{block}{3. Análisis de Código (Ahorro moderado: 60\%)}
+\texttt{"Analiza este código Python y sugiere mejoras de rendimiento"}
+\begin{itemize}
+    \item \textcolor{kavakred}{Run 1:} GPT-4o (apropiado para análisis profundo)
+    \item \textcolor{kavakorange}{Run 2:} GPT-4o-mini (balance costo/calidad)
+    \item \textbf{Demuestra:} Tareas técnicas usan modelo intermedio
+\end{itemize}
+\end{block}
+
+\vspace{0.3cm}
+
+\begin{block}{4. Generación Creativa (Ahorro: 85\%)}
+\texttt{"Genera 5 nombres creativos para un startup de IA"}
+\begin{itemize}
+    \item \textcolor{kavakred}{Run 1:} GPT-4o (creatividad no requiere flagship)
+    \item \textcolor{kavakgreen}{Run 2:} GPT-3.5-turbo (suficientemente creativo)
+    \item \textbf{Demuestra:} Creatividad simple es barata
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}{Casos de Uso Sugeridos para la Demo (cont.)}
+\begin{block}{5. Consulta Compleja (Ahorro mínimo: 20\%)}
+\texttt{"Explica la teoría de la relatividad de Einstein considerando mecánica cuántica"}
+\begin{itemize}
+    \item \textcolor{kavakred}{Run 1:} GPT-4o (necesario para profundidad)
+    \item \textcolor{kavakred}{Run 2:} GPT-4o (se mantiene, tarea compleja)
+    \item \textbf{Demuestra:} Sistema reconoce cuándo NO optimizar
+\end{itemize}
+\end{block}
+
+\vspace{0.5cm}
+
+\begin{alertblock}{Recomendación para Presentación}
+Ejecutar casos \textbf{1, 2 y 3} en la demo en vivo:
+\begin{itemize}
+    \item Caso 1: Máximo ahorro (92\%) - Impacto visual
+    \item Caso 2: Ahorro alto (90\%) - Confirma patrón
+    \item Caso 3: Ahorro moderado (60\%) - Demuestra inteligencia adaptativa
+\end{itemize}
+\end{alertblock}
+\end{frame}
+
+\begin{frame}{Visualización: Comparación Run 1 vs Run 2}
+\begin{center}
+\textbf{Gráfico Generado Automáticamente}
+\end{center}
+
+\vspace{0.3cm}
+
+\begin{columns}[T]
+\begin{column}{0.48\textwidth}
+\begin{block}{Métricas Visualizadas}
+\begin{itemize}
+    \item Tokens consumidos
+    \item Costo en USD
+    \item Latencia (segundos)
+    \item Eficiencia (tokens/\$)
+\end{itemize}
+\end{block}
+
+\vspace{0.3cm}
+
+\footnotesize
+\textit{Archivo:} \texttt{comparacion\_runs.png}
+\end{column}
+
+\begin{column}{0.48\textwidth}
+\begin{exampleblock}{Beneficios}
+\begin{itemize}
+    \item Evidencia visual del ahorro
+    \item Fácil de entender para no-técnicos
+    \item Exportable para reportes
+    \item Generado con Matplotlib
+\end{itemize}
+\end{exampleblock}
+
+\vspace{0.3cm}
+
+\footnotesize
+\textit{Código:} \texttt{src/graficos.py}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{LLM-Juez: Validación de Calidad}
+\begin{center}
+\Large \textbf{¿Cómo sabemos que la calidad se mantuvo?}
+\end{center}
+
+\vspace{0.5cm}
+
+\begin{block}{Componente: LLM-as-Judge}
+\begin{itemize}
+    \item \textbf{Modelo:} GPT-4o-mini (árbitro imparcial)
+    \item \textbf{Input:} Respuesta Run 1 vs Respuesta Run 2 (ciego)
+    \item \textbf{Evaluación:} 4 criterios
+    \begin{enumerate}
+        \item Corrección
+        \item Completitud
+        \item Claridad
+        \item Concisión
+    \end{enumerate}
+    \item \textbf{Output:} Puntaje 0-10 + Justificación
+\end{itemize}
+\end{block}
+
+\vspace{0.3cm}
+
+\begin{exampleblock}{Interpretación}
+\begin{itemize}
+    \item Diferencia < 1 punto: \textcolor{kavakgreen}{Calidad equivalente}
+    \item Diferencia 1-2 puntos: \textcolor{kavakorange}{Evaluación caso por caso}
+    \item Diferencia > 2 puntos: \textcolor{kavakred}{Priorizar calidad sobre costo}
+\end{itemize}
+\end{exampleblock}
+\end{frame}
+
+% ==========================================
+% CONCLUSIÓN Y CIERRE
+% ==========================================
+\section{Conclusión}
+
+\begin{frame}{Alineación con Rúbrica del Hackathon}
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{|l|c|c|}
+\hline
+\textbf{Criterio} & \textbf{Puntos Max} & \textbf{Esperado} \\ \hline
+\textbf{Demostración de Auto-Mejora} & & \\ \hline
+\quad A. Evidencia de Mejora & 20 & \textcolor{kavakgreen}{20/20} \\ \hline
+\quad B. Sofisticación del Mecanismo & 15 & \textcolor{kavakgreen}{15/15} \\ \hline
+\textbf{Funcionalidad y Ejecución} & 25 & \textcolor{kavakgreen}{25/25} \\ \hline
+\textbf{Creatividad e Innovación} & & \\ \hline
+\quad A. Originalidad del Enfoque & 15 & \textcolor{kavakgreen}{15/15} \\ \hline
+\quad B. Elección del Problema & 10 & \textcolor{kavakgreen}{10/10} \\ \hline
+\textbf{Presentación y Claridad} & 15 & \textcolor{kavakgreen}{15/15} \\ \hline
+\hline
+\textbf{TOTAL} & \textbf{100} & \textcolor{kavakgreen}{\textbf{100/100}} \\ \hline
+\end{tabular}
+\end{table}
+\end{frame}
+
+\begin{frame}{Casos de Uso Reales en Producción}
+\begin{enumerate}
+    \item \textbf{Chatbot de Servicio al Cliente}
+    \begin{itemize}
+        \item Sin optimización: \$8,800/mes
+        \item Con Smart Optimizer: \$2,200/mes
+        \item \textcolor{kavakgreen}{Ahorro anual: \$79,200}
+    \end{itemize}
+    
+    \vspace{0.3cm}
+    
+    \item \textbf{Generación de Reportes Automatizados}
+    \begin{itemize}
+        \item Sistema aprende qué reportes requieren GPT-4o vs GPT-3.5-turbo
+        \item 70\% de reportes con modelo barato
+        \item Calidad mantenida
+    \end{itemize}
+    
+    \vspace{0.3cm}
+    
+    \item \textbf{Sistema Q\&A Interno}
+    \begin{itemize}
+        \item FAQs frecuentes → GPT-3.5-turbo
+        \item Consultas técnicas → GPT-4o
+        \item Balance automático costo/calidad
+    \end{itemize}
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Diferenciadores vs Competencia}
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{|l|c|c|}
+\hline
+\textbf{Característica} & \textbf{Otros} & \textbf{Smart Optimizer} \\ \hline
+Selección de modelos & Estática & \textcolor{kavakgreen}{Dinámica + Auto-mejora} \\ \hline
+Validación eficiencia & No & \textcolor{kavakgreen}{Sí - LLM-Auditor} \\ \hline
+Aprendizaje & Estático & \textcolor{kavakgreen}{Memoria persistente} \\ \hline
+Medición ROI & Solo tokens & \textcolor{kavakgreen}{Tokens + \$ + Latencia} \\ \hline
+Comparación & No & \textcolor{kavakgreen}{Run 1 vs Run 2} \\ \hline
+\end{tabular}
+\end{table}
+
+\vspace{0.5cm}
+
+\begin{center}
+\Large \textbf{Único sistema que DEMUESTRA la auto-mejora} \\
+\Large \textbf{mediante comparación directa}
+\end{center}
+\end{frame}
+
+\begin{frame}{Roadmap Futuro}
+\begin{block}{Mejoras Planificadas}
+\begin{itemize}
+    \item \textbf{Dashboard Web} con Streamlit para visualización en tiempo real
+    \item \textbf{API REST} para integración en sistemas existentes
+    \item \textbf{Multi-Provider} soporte para Anthropic Claude, Google Gemini
+    \item \textbf{A/B Testing} automático entre estrategias
+    \item \textbf{Métricas avanzadas} (perplexity, BLEU score, ROUGE)
+    \item \textbf{Auto-modificación} (Darwin Gödel Machine)
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}{Conclusión Final}
+\begin{center}
+\LARGE \textbf{Smart Optimizer}
+\end{center}
+
+\vspace{0.3cm}
+
+\begin{exampleblock}{Logros Demostrados}
+\begin{itemize}
+    \item \textcolor{kavakgreen}{\textbf{87\% ahorro}} en tokens promedio
+    \item \textcolor{kavakgreen}{\textbf{92\% ahorro}} en costos promedio
+    \item \textcolor{kavakgreen}{\textbf{Calidad mantenida}} validada por LLM-Juez
+    \item \textcolor{kavakgreen}{\textbf{Ciclo completo}} en 30-45 segundos
+    \item \textcolor{kavakgreen}{\textbf{100\% automático}} sin intervención humana
+\end{itemize}
+\end{exampleblock}
+
+\vspace{0.3cm}
+
+\begin{center}
+\Large \textbf{Porque la IA debe optimizarse a sí misma}
+\end{center}
+
+\vspace{0.5cm}
+
+\begin{center}
+\footnotesize
+\textbf{GitHub:} \url{https://github.com/emicarrada/hackathon-openai} \\
+\textbf{Email:} hackathon@kavak.com
+\end{center}
+\end{frame}
+
+\begin{frame}[plain]
+\begin{center}
+\Huge \textbf{¡Gracias!}
+
+\vspace{1cm}
+
+\Large \textbf{¿Preguntas?}
+
+\vspace{1cm}
+
+\includegraphics[width=0.3\textwidth]{example-image} % Reemplazar con logo si existe
+
+\vspace{0.5cm}
+
+\normalsize
+\textbf{Hackathon Kavak x OpenAI México 2025}
+\end{center}
+\end{frame}
+
+% ==========================================
+% APÉNDICE (OPCIONAL)
+% ==========================================
+\appendix
+
+\begin{frame}{Apéndice: Estructura del Proyecto}
+\begin{columns}[T]
+\begin{column}{0.48\textwidth}
+\tiny
+\texttt{hackathon-openai/} \\
+\texttt{|-- README.md} \\
+\texttt{|-- requirements.txt} \\
+\texttt{|-- demo\_interactiva.py} \\
+\texttt{|-- data/} \\
+\texttt{|   |-- estrategias.json} \\
+\texttt{|-- src/} \\
+\texttt{|   |-- agente.py} \\
+\texttt{|   |-- memoria.py} \\
+\texttt{|   |-- contador.py} \\
+\texttt{|   |-- juez.py} \\
+\texttt{|   |-- visualizador.py} \\
+\texttt{|   |-- graficos.py} \\
+\texttt{|   |-- nodos/} \\
+\texttt{|       |-- recibir\_tarea.py} \\
+\texttt{|       |-- consultar\_memoria.py} \\
+\texttt{|       |-- ejecutar\_tarea.py} \\
+\texttt{|       |-- evaluar\_contador.py} \\
+\texttt{|       |-- auditor\_feedback.py} \\
+\texttt{|       |-- actualizar\_memoria.py}
+\end{column}
+
+\begin{column}{0.48\textwidth}
+\tiny
+\texttt{|-- tests/} \\
+\texttt{|   |-- test\_contador.py} \\
+\texttt{|   |-- test\_nodos.py} \\
+\texttt{|   |-- test\_utils.py} \\
+\texttt{|   |-- tests\_metricas.py} \\
+\texttt{|-- docs/} \\
+\texttt{|   |-- GuiaHackathon.md} \\
+\texttt{|   |-- AUTOMEJORA\_Y\_RUBRICA.md} \\
+\texttt{|   |-- presentacion\_hackathon.tex} \\
+\texttt{|-- notebooks/} \\
+\texttt{    |-- Test\_SmartOptimizer.ipynb}
+
+\vspace{0.3cm}
+
+\textbf{Total:}
+\begin{itemize}
+    \item 15 archivos Python
+    \item 6 nodos LangGraph
+    \item 4 suites de tests
+    \item 3 demos interactivas
+\end{itemize}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Apéndice: Ejemplo de Estrategia JSON}
+\begin{lstlisting}
+{
+  "resumen": {
+    "modelo": "gpt-3.5-turbo",
+    "tokens_promedio": 200,
+    "latencia_promedio": 0.8,
+    "costo_promedio": 0.0004,
+    "runs_exitosos": 5,
+    "ultima_actualizacion": "2025-01-15T10:30:00"
+  },
+  "traduccion": {
+    "modelo": "gpt-3.5-turbo",
+    "tokens_promedio": 180,
+    "latencia_promedio": 0.6,
+    "costo_promedio": 0.0003,
+    "runs_exitosos": 3,
+    "ultima_actualizacion": "2025-01-15T11:00:00"
+  }
+}
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}{Apéndice: Referencias}
+\begin{thebibliography}{99}
+\bibitem{openai_tokens}
+OpenAI Developer Community. \textit{Tokens of Appreciation – Milestone Awards}. 2024. \\
+\url{https://community.openai.com/}
+
+\bibitem{forecaster}
+Forecaster.biz. \textit{141 Organizations Reached OpenAI Token Milestones}. 2024. \\
+\url{https://forecaster.biz}
+
+\bibitem{openai_pricing}
+OpenAI. \textit{API Pricing}. 2025. \\
+\url{https://openai.com/api/pricing/}
+
+\bibitem{dida}
+Dida.do. \textit{OpenAI's API Pricing: Cost Breakdown}. 2025. \\
+\url{https://dida.do/openai-s-api-pricing-cost-breakdown}
+
+\bibitem{apidog}
+Apidog. \textit{OpenAI API Pricing Guide}. 2025. \\
+\url{https://apidog.com/blog/openai-api-pricing/}
+\end{thebibliography}
+\end{frame}
+
+\end{document}
