@@ -4,5 +4,11 @@
     "tokens_promedio": 128,
     "latencia_promedio": 0.0,
     "ultima_actualizacion": "2025-10-23T13:32:43.892543"
+  },
+  "traduccion": {
+    "modelo": "gpt-3.5-turbo",
+    "tokens_promedio": 0,
+    "latencia_promedio": 0.0,
+    "ultima_actualizacion": "2025-10-23T14:35:06.349192"
   }
 }

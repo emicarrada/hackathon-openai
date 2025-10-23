@@ -336,7 +336,7 @@ Estilo: Narrativo, emotivo, con buen ritmo.""",
 ```
 Mejora src/nodos/ejecutar_tarea.py para:
 
-1. Crear diccionario PROMPTS_SISTEMA con prompts especializados para:
+1. Crear diccionario PROMPTS_SISTEMA con pe llamerompts especializados para:
    - resumen
    - traduccion
    - codigo

@@ -1,16 +1,24 @@
+"""
+Tests para utilidades del sistema (utils.py)
+"""
 import pytest
-from src.utils import inicializar_openai, llamar_openai_simple
+from src.utils import client
+import os
 
-def test_inicializar_openai():
-    """Test que inicializar_openai retorna un cliente válido (stub)."""
-    cliente = inicializar_openai()
-    assert cliente is not None  # Solo verifica que no sea None, sin llamadas reales
 
-def test_llamar_openai_simple():
-    """Test que llamar_openai_simple maneja errores sin API key (stub)."""
-    # En modo stub, debería manejar gracefully sin key real
-    try:
-        resultado = llamar_openai_simple("Test prompt", modelo="gpt-3.5-turbo")
-        assert isinstance(resultado, str)  # Espera string, pero fallará sin key
-    except Exception as e:
-        assert "API key" in str(e) or "openai" in str(e).lower()  # Verifica error esperado
+def test_client_inicializado():
+    """Test que el cliente de OpenAI está correctamente inicializado."""
+    assert client is not None
+    assert hasattr(client, 'chat')
+
+
+def test_api_key_configurada():
+    """Test que la API key está configurada en el entorno."""
+    api_key = os.getenv("OPENAI_API_KEY")
+    
+    # Si no hay API key, el test debe advertir
+    if not api_key:
+        pytest.skip("API key no configurada (esperado en CI/CD)")
+    
+    assert api_key is not None
+    assert len(api_key) > 20  # Las API keys de OpenAI son largas
