@@ -269,6 +269,69 @@ def main():
             print(respuesta2)
         print(f"{Fore.WHITE}{'─'*80}{Style.RESET_ALL}")
         
+        # 7.5 VALIDACIÓN CON JUEZ LLM: ¿Realmente es mejor el modelo optimizado?
+        print(f"\n{Fore.MAGENTA}{'='*80}{Style.RESET_ALL}")
+        print(f"{Fore.MAGENTA + Style.BRIGHT}🏛️  JUEZ LLM - VALIDACIÓN DE CALIDAD{Style.RESET_ALL}")
+        print(f"{Fore.MAGENTA}{'='*80}{Style.RESET_ALL}")
+        print(f"\n{Fore.YELLOW}⚖️  Comparando respuestas objetivamente...{Style.RESET_ALL}")
+        
+        from src.juez import juez_llm
+        
+        try:
+            veredicto = juez_llm(
+                respuesta_a=respuesta1,
+                respuesta_b=respuesta2,
+                tarea=tarea_usuario
+            )
+            
+            # Mostrar veredicto
+            print(f"\n{Fore.CYAN}📊 VEREDICTO DEL JUEZ:{Style.RESET_ALL}")
+            print(f"{Fore.WHITE}{'─'*80}{Style.RESET_ALL}")
+            
+            ganador = veredicto.get("ganador", "empate")
+            puntaje_a = veredicto.get("puntaje_a", 0)
+            puntaje_b = veredicto.get("puntaje_b", 0)
+            justificacion = veredicto.get("justificacion", "")
+            
+            # Mostrar ganador con colores
+            if ganador == "A":
+                ganador_texto = f"{Fore.RED}Run 1 ({modelo1}){Style.RESET_ALL}"
+            elif ganador == "B":
+                ganador_texto = f"{Fore.GREEN}Run 2 ({modelo2}){Style.RESET_ALL}"
+            else:
+                ganador_texto = f"{Fore.YELLOW}EMPATE{Style.RESET_ALL}"
+            
+            print(f"   🏆 Ganador: {ganador_texto}")
+            print(f"   📊 Puntaje Run 1 ({modelo1}): {Fore.RED}{puntaje_a}/10{Style.RESET_ALL}")
+            print(f"   📊 Puntaje Run 2 ({modelo2}): {Fore.GREEN}{puntaje_b}/10{Style.RESET_ALL}")
+            
+            # Mostrar justificación (primeras 200 chars)
+            if justificacion:
+                print(f"\n   💭 Justificación:")
+                justif_corta = justificacion[:200] + "..." if len(justificacion) > 200 else justificacion
+                print(f"   {justif_corta}")
+            
+            print(f"{Fore.WHITE}{'─'*80}{Style.RESET_ALL}")
+            
+            # Análisis crítico: ¿El ahorro en costo justifica la pérdida de calidad?
+            if ganador == "A" and costo1 > costo2:
+                print(f"\n{Fore.YELLOW}⚠️  ANÁLISIS CRÍTICO:{Style.RESET_ALL}")
+                print(f"   El modelo caro ({modelo1}) dio mejor respuesta")
+                print(f"   pero el barato ({modelo2}) ahorró ${costo1 - costo2:.6f}")
+                print(f"   Diferencia de calidad: {puntaje_a - puntaje_b:.1f} puntos")
+                if puntaje_a - puntaje_b < 1.0:
+                    print(f"   {Fore.GREEN}✅ Diferencia mínima - El ahorro lo justifica{Style.RESET_ALL}")
+                else:
+                    print(f"   {Fore.RED}❌ Diferencia significativa - Considerar usar modelo caro{Style.RESET_ALL}")
+            elif ganador == "B":
+                print(f"\n{Fore.GREEN}🎉 ¡PERFECTO! El modelo optimizado es mejor Y más barato{Style.RESET_ALL}")
+            elif ganador == "empate":
+                print(f"\n{Fore.GREEN}✅ Calidad similar - El ahorro en costo es ganancia pura{Style.RESET_ALL}")
+                
+        except Exception as e:
+            print(f"\n{Fore.RED}❌ Error al ejecutar juez: {str(e)}{Style.RESET_ALL}")
+            print(f"{Fore.YELLOW}Continuando con comparación de métricas...{Style.RESET_ALL}")
+        
         # 8. Mostrar visualización comparativa (si ambos runs tienen métricas)
         if tokens1 > 0 and tokens2 > 0:
             from src.visualizador import mostrar_comparacion_run1_vs_run2

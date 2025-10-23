@@ -97,6 +97,27 @@ def main():
     print(f"\n{Fore.CYAN}📝 Respuesta:{Style.RESET_ALL}")
     print(f"   {respuesta2[:200]}..." if len(respuesta2) > 200 else f"   {respuesta2}")
     
+    # Validación con Juez LLM
+    print(f"\n{Fore.MAGENTA}🏛️  JUEZ LLM - Validando calidad...{Style.RESET_ALL}")
+    from src.juez import juez_llm
+    
+    try:
+        veredicto = juez_llm(respuesta1, respuesta2, tarea)
+        ganador = veredicto.get("ganador", "empate")
+        puntaje_a = veredicto.get("puntaje_a", 0)
+        puntaje_b = veredicto.get("puntaje_b", 0)
+        
+        ganador_txt = "Run 1" if ganador == "A" else "Run 2" if ganador == "B" else "EMPATE"
+        print(f"   🏆 Ganador: {ganador_txt}")
+        print(f"   📊 Run 1: {puntaje_a}/10  |  Run 2: {puntaje_b}/10")
+        
+        if ganador == "B" or ganador == "empate":
+            print(f"   {Fore.GREEN}✅ Optimización exitosa: Mejor o igual calidad + menor costo{Style.RESET_ALL}")
+        else:
+            print(f"   {Fore.YELLOW}⚠️  Modelo caro fue mejor (diferencia: {puntaje_a - puntaje_b:.1f} pts){Style.RESET_ALL}")
+    except Exception as e:
+        print(f"   {Fore.RED}❌ Error en juez: {str(e)}{Style.RESET_ALL}")
+    
     # Visualización
     if metricas1.get('tokens_totales', 0) > 0 and metricas2.get('tokens_totales', 0) > 0:
         mostrar_comparacion_run1_vs_run2(
