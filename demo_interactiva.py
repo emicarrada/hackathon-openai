@@ -8,7 +8,9 @@ Permite al usuario ingresar CUALQUIER tarea y demuestra el ciclo de automejora:
 3. Run 1: Usa modelo caro sin estrategia
 4. Auditor detecta ineficiencia
 5. Memoria se actualiza con modelo optimizado
-6. Run 2: Usa modelo optimizado
+6. Run 2: Usa modelo optimizadoPerfecto, voy a integrar las mejoras útiles de Brandon para que funcionen con demo_interactiva.py. Voy a:
+
+
 7. Visualizador muestra comparación impresionante
 
 Uso:
@@ -379,7 +381,21 @@ def main():
         print(Fore.GREEN + Style.BRIGHT + "✅ DEMO COMPLETADA".center(80) + Style.RESET_ALL)
         print("="*80)
         
-        # Calcular ahorro
+        # 10. 🆕 Generar gráfico comparativo (Brandon)
+        try:
+            from src.graficos import generar_grafico_ahorro
+            
+            if tokens1 > 0 and tokens2 > 0:
+                print()
+                print(Fore.CYAN + "📊 Generando gráfico comparativo..." + Style.RESET_ALL)
+                generar_grafico_ahorro(metricas1, metricas2)
+                print(Fore.GREEN + "✅ Gráfico guardado: comparacion_runs.png" + Style.RESET_ALL)
+        except ImportError:
+            print(Fore.YELLOW + "⚠️  Módulo graficos no disponible (instala matplotlib)" + Style.RESET_ALL)
+        except Exception as e:
+            print(Fore.YELLOW + f"⚠️  No se pudo generar gráfico: {e}" + Style.RESET_ALL)
+        
+        # 11. Calcular ahorro
         if costo1 > 0 and costo2 > 0:
             ahorro_costo = costo1 - costo2
             porcentaje_ahorro = (ahorro_costo / costo1) * 100
