@@ -119,7 +119,9 @@ Runs 3-1000: Todos usan modelo optimizado
                        │
                        ▼
 ┌─────────────────────────────────────────────────────────────┐
-│                     SISTEMA MEJORADO                         │
+│                  
+
+   SISTEMA MEJORADO                         │
 │          Próxima petición usará modelo optimizado            │
 └─────────────────────────────────────────────────────────────┘
 ```
