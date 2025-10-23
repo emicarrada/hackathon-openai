@@ -506,7 +506,6 @@ pytest tests/ -v
 - **Emiliano Carrada** - Arquitectura y Orquestación
 - **Brandon** - Nodo Evaluador + Tests
 - **Israel** - Nodo Generador + Integración
-- **Cristopher** - Nodo Validador + Memoria
 
 ---
 
