@@ -4,5 +4,47 @@
     "tokens_promedio": 128,
     "latencia_promedio": 0.0,
     "ultima_actualizacion": "2025-10-23T13:32:43.892543"
+  },
+  "traduccion": {
+    "modelo": "gpt-3.5-turbo",
+    "tokens_promedio": 0,
+    "latencia_promedio": 0.0,
+    "ultima_actualizacion": "2025-10-23T15:12:39.757337"
+  },
+  "extraccion": {
+    "modelo": "gpt-3.5-turbo",
+    "tokens_promedio": 0,
+    "latencia_promedio": 0.0,
+    "ultima_actualizacion": "2025-10-23T15:12:47.230025"
+  },
+  "analisis": {
+    "modelo": "GPT-4o",
+    "tokens_promedio": 0,
+    "latencia_promedio": 0.0,
+    "ultima_actualizacion": "2025-10-23T15:13:16.321781"
+  },
+  "comparacion": {
+    "modelo": "ninguna",
+    "tokens_promedio": 0,
+    "latencia_promedio": 0.0,
+    "ultima_actualizacion": "2025-10-23T15:13:33.175805"
+  },
+  "codigo": {
+    "modelo": "ninguna",
+    "tokens_promedio": 0,
+    "latencia_promedio": 0.0,
+    "ultima_actualizacion": "2025-10-23T15:13:54.517089"
+  },
+  "qa": {
+    "modelo": "ninguna",
+    "tokens_promedio": 0,
+    "latencia_promedio": 0.0,
+    "ultima_actualizacion": "2025-10-23T15:14:16.932169"
+  },
+  "clasificacion": {
+    "modelo": "gpt-3.5-turbo",
+    "tokens_promedio": 0,
+    "latencia_promedio": 0.0,
+    "ultima_actualizacion": "2025-10-23T15:14:28.596254"
   }
 }
