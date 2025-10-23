@@ -60,6 +60,7 @@ def mostrar_ejemplos():
 def obtener_input_usuario():
     """
     Obtiene la tarea del usuario de forma interactiva.
+    Acepta múltiples líneas y espacios múltiples.
     
     Returns:
         str: La tarea ingresada por el usuario
@@ -68,10 +69,13 @@ def obtener_input_usuario():
     mostrar_ejemplos()
     
     print("\n" + "-"*80)
+    print(Fore.CYAN + "💡 Tip: Puedes escribir con espacios normales, presiona Enter cuando termines" + Style.RESET_ALL)
     print()
     
     try:
-        tarea = input(Fore.YELLOW + Style.BRIGHT + "💬 Tu tarea: " + Style.RESET_ALL).strip()
+        tarea = input(Fore.YELLOW + Style.BRIGHT + "💬 Tu tarea: " + Style.RESET_ALL)
+        # Limpiar espacios múltiples pero mantener la tarea legible
+        tarea = ' '.join(tarea.split())  # Normaliza espacios múltiples a uno solo
     except (KeyboardInterrupt, EOFError):
         print("\n\n👋 Demo cancelada por el usuario")
         sys.exit(0)
@@ -227,15 +231,12 @@ def main():
         print(f"   Tokens: {tokens1}")
         print(f"   Costo: {Fore.RED}${costo1:.6f}{Style.RESET_ALL}")
         
-        # Mostrar respuesta generada
-        print(f"\n{Fore.CYAN}📝 Respuesta generada:{Style.RESET_ALL}")
+        # Mostrar respuesta generada COMPLETA
+        print(f"\n{Fore.CYAN}📝 Respuesta generada (COMPLETA):{Style.RESET_ALL}")
         print(f"{Fore.WHITE}{'─'*80}{Style.RESET_ALL}")
-        # Limitar a 300 caracteres para no saturar pantalla
-        if len(respuesta1) > 300:
-            print(f"{respuesta1[:300]}...")
-        else:
-            print(respuesta1)
+        print(respuesta1)  # SIN LÍMITE - Mostrar todo
         print(f"{Fore.WHITE}{'─'*80}{Style.RESET_ALL}")
+        print(f"{Fore.CYAN}📏 Longitud: {len(respuesta1)} caracteres{Style.RESET_ALL}")
         
         # 6. Mostrar aprendizaje
         mostrar_seccion_aprendizaje(resultado1)
@@ -259,20 +260,27 @@ def main():
         print(f"   Tokens: {tokens2}")
         print(f"   Costo: {Fore.GREEN}${costo2:.6f}{Style.RESET_ALL}")
         
-        # Mostrar respuesta generada
-        print(f"\n{Fore.CYAN}📝 Respuesta generada:{Style.RESET_ALL}")
+        # Mostrar respuesta generada COMPLETA
+        print(f"\n{Fore.CYAN}📝 Respuesta generada (COMPLETA):{Style.RESET_ALL}")
         print(f"{Fore.WHITE}{'─'*80}{Style.RESET_ALL}")
-        # Limitar a 300 caracteres
-        if len(respuesta2) > 300:
-            print(f"{respuesta2[:300]}...")
-        else:
-            print(respuesta2)
+        print(respuesta2)  # SIN LÍMITE - Mostrar todo
         print(f"{Fore.WHITE}{'─'*80}{Style.RESET_ALL}")
+        print(f"{Fore.CYAN}📏 Longitud: {len(respuesta2)} caracteres{Style.RESET_ALL}")
         
         # 7.5 VALIDACIÓN CON JUEZ LLM: ¿Realmente es mejor el modelo optimizado?
         print(f"\n{Fore.MAGENTA}{'='*80}{Style.RESET_ALL}")
         print(f"{Fore.MAGENTA + Style.BRIGHT}🏛️  JUEZ LLM - VALIDACIÓN DE CALIDAD{Style.RESET_ALL}")
         print(f"{Fore.MAGENTA}{'='*80}{Style.RESET_ALL}")
+        
+        # Explicación del juez
+        print(f"\n{Fore.CYAN}ℹ️  Cómo funciona el Juez LLM:{Style.RESET_ALL}")
+        print(f"   • Usa GPT-4o-mini como árbitro imparcial")
+        print(f"   • Compara ambas respuestas sin saber qué modelo las generó")
+        print(f"   • Evalúa 4 criterios: Corrección, Completitud, Claridad, Concisión")
+        print(f"   • Asigna puntaje 0-10 basándose en la calidad objetiva")
+        print(f"   • {Fore.YELLOW}⚠️  Importante: Si GPT-4o pierde, puede ser sesgo del juez{Style.RESET_ALL}")
+        print(f"   • {Fore.YELLOW}⚠️  GPT-4o puede dar respuestas más profundas que el juez no aprecia{Style.RESET_ALL}")
+        
         print(f"\n{Fore.YELLOW}⚖️  Comparando respuestas objetivamente...{Style.RESET_ALL}")
         
         from src.juez import juez_llm
@@ -305,11 +313,10 @@ def main():
             print(f"   📊 Puntaje Run 1 ({modelo1}): {Fore.RED}{puntaje_a}/10{Style.RESET_ALL}")
             print(f"   📊 Puntaje Run 2 ({modelo2}): {Fore.GREEN}{puntaje_b}/10{Style.RESET_ALL}")
             
-            # Mostrar justificación (primeras 200 chars)
+            # Mostrar justificación COMPLETA
             if justificacion:
-                print(f"\n   💭 Justificación:")
-                justif_corta = justificacion[:200] + "..." if len(justificacion) > 200 else justificacion
-                print(f"   {justif_corta}")
+                print(f"\n   💭 Justificación del Juez:")
+                print(f"   {justificacion}")
             
             print(f"{Fore.WHITE}{'─'*80}{Style.RESET_ALL}")
             
@@ -319,14 +326,34 @@ def main():
                 print(f"   El modelo caro ({modelo1}) dio mejor respuesta")
                 print(f"   pero el barato ({modelo2}) ahorró ${costo1 - costo2:.6f}")
                 print(f"   Diferencia de calidad: {puntaje_a - puntaje_b:.1f} puntos")
+                print(f"\n   {Fore.CYAN}🤔 Interpretación:{Style.RESET_ALL}")
                 if puntaje_a - puntaje_b < 1.0:
-                    print(f"   {Fore.GREEN}✅ Diferencia mínima - El ahorro lo justifica{Style.RESET_ALL}")
+                    print(f"   {Fore.GREEN}✅ Diferencia mínima (<1pt) - El ahorro lo justifica{Style.RESET_ALL}")
+                    print(f"   {Fore.GREEN}   Recomendación: Usar {modelo2} para esta tarea{Style.RESET_ALL}")
+                elif puntaje_a - puntaje_b < 2.0:
+                    print(f"   {Fore.YELLOW}⚖️  Diferencia moderada (1-2pts) - Evaluación caso por caso{Style.RESET_ALL}")
+                    print(f"   {Fore.YELLOW}   Si presupuesto es crítico → {modelo2}{Style.RESET_ALL}")
+                    print(f"   {Fore.YELLOW}   Si calidad es crítica → {modelo1}{Style.RESET_ALL}")
                 else:
-                    print(f"   {Fore.RED}❌ Diferencia significativa - Considerar usar modelo caro{Style.RESET_ALL}")
+                    print(f"   {Fore.RED}❌ Diferencia significativa (>2pts) - Calidad más importante{Style.RESET_ALL}")
+                    print(f"   {Fore.RED}   Recomendación: Usar {modelo1} para esta tarea{Style.RESET_ALL}")
+                    print(f"\n   {Fore.MAGENTA}⚠️  ADVERTENCIA SOBRE EL JUEZ:{Style.RESET_ALL}")
+                    print(f"   {Fore.MAGENTA}   • El juez usa GPT-4o-mini (modelo intermedio){Style.RESET_ALL}")
+                    print(f"   {Fore.MAGENTA}   • Puede favorecer respuestas concisas sobre profundas{Style.RESET_ALL}")
+                    print(f"   {Fore.MAGENTA}   • GPT-4o puede incluir detalles que el juez no aprecia{Style.RESET_ALL}")
+                    print(f"   {Fore.MAGENTA}   • Revisa ambas respuestas TÚ MISMO para confirmar{Style.RESET_ALL}")
             elif ganador == "B":
                 print(f"\n{Fore.GREEN}🎉 ¡PERFECTO! El modelo optimizado es mejor Y más barato{Style.RESET_ALL}")
+                print(f"   {Fore.GREEN}Ahorro: ${costo1 - costo2:.6f} ({((costo1-costo2)/costo1*100):.1f}%){Style.RESET_ALL}")
+                print(f"   {Fore.GREEN}Mejor calidad: +{puntaje_b - puntaje_a:.1f} puntos{Style.RESET_ALL}")
+                print(f"\n   {Fore.CYAN}💡 Insight:{Style.RESET_ALL}")
+                print(f"   Para esta tarea específica, el modelo barato es MEJOR.")
+                print(f"   Esto pasa cuando la tarea es simple y no requiere capacidades avanzadas.")
             elif ganador == "empate":
                 print(f"\n{Fore.GREEN}✅ Calidad similar - El ahorro en costo es ganancia pura{Style.RESET_ALL}")
+                print(f"   Ambos modelos dieron respuestas de calidad equivalente")
+                print(f"   Ahorro: ${costo1 - costo2:.6f} sin pérdida de calidad")
+                print(f"\n   {Fore.GREEN}✅ Recomendación: Usar {modelo2} siempre para este tipo de tareas{Style.RESET_ALL}")
                 
         except Exception as e:
             print(f"\n{Fore.RED}❌ Error al ejecutar juez: {str(e)}{Style.RESET_ALL}")
