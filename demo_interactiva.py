@@ -1,19 +1,17 @@
 """
-Demo Interactiva - Smart Optimizer
-Hackathon OpenAI México 2025
+Interactive Demo - Flux
+OpenAI México Hackathon 2025
 
-Permite al usuario ingresar CUALQUIER tarea y demuestra el ciclo de automejora:
-1. Usuario ingresa tarea libre
-2. Sistema clasifica automáticamente el tipo
-3. Run 1: Usa modelo caro sin estrategia
-4. Auditor detecta ineficiencia
-5. Memoria se actualiza con modelo optimizado
-6. Run 2: Usa modelo optimizadoPerfecto, voy a integrar las mejoras útiles de Brandon para que funcionen con demo_interactiva.py. Voy a:
+Allows user to input ANY task and demonstrates the self-improvement cycle:
+1. User inputs free-form task
+2. System automatically classifies type
+3. Run 1: Uses expensive model without strategy
+4. Auditor detects inefficiency
+5. Memory updates with optimized model
+6. Run 2: Uses optimized model
+7. Visualizer shows impressive comparison
 
-
-7. Visualizador muestra comparación impresionante
-
-Uso:
+Usage:
     python demo_interactiva.py
 """
 
@@ -22,82 +20,83 @@ import sys
 import json
 from dotenv import load_dotenv
 
-# Cargar variables de entorno
+# Load environment variables
 load_dotenv()
 
-# Verificar API key
+# Verify API key
 if not os.getenv("OPENAI_API_KEY"):
-    print("❌ Error: OPENAI_API_KEY no encontrada en .env")
-    print("💡 Tip: Copia env.template a .env y agrega tu API key")
+    print("❌ Error: OPENAI_API_KEY not found in .env file")
+    print("💡 Tip: Copy env.template to .env and add your API key")
+    print("📖 Get your key at: https://platform.openai.com/api-keys")
     sys.exit(1)
 
 from src.agente import SmartOptimizerAgent
 from colorama import Fore, Style, init
 
-# Inicializar colorama
+# Initialize colorama
 init(autoreset=True)
 
 
 def mostrar_header():
-    """Muestra el header de la demo interactiva"""
+    """Shows interactive demo header"""
     print("\n" + "="*80)
-    print(Fore.CYAN + Style.BRIGHT + "🎯 DEMO INTERACTIVA - SMART OPTIMIZER".center(80) + Style.RESET_ALL)
-    print(Fore.CYAN + "Hackathon OpenAI México 2025".center(80) + Style.RESET_ALL)
+    print(Fore.CYAN + Style.BRIGHT + "⚡ FLUX - INTELLIGENT LLM ROUTER".center(80) + Style.RESET_ALL)
+    print(Fore.CYAN + "OpenAI México Hackathon 2025".center(80) + Style.RESET_ALL)
     print("="*80)
 
 
 def mostrar_ejemplos():
-    """Muestra ejemplos de tareas que el usuario puede ingresar"""
-    print("\n" + Fore.YELLOW + "📝 Escribe CUALQUIER tarea que quieras ejecutar:" + Style.RESET_ALL)
-    print("\n" + Fore.GREEN + "Ejemplos de tareas que puedes probar:" + Style.RESET_ALL)
-    print("  • " + Fore.CYAN + "Resume este artículo sobre inteligencia artificial" + Style.RESET_ALL)
-    print("  • " + Fore.CYAN + "Traduce 'Hello World' al español y francés" + Style.RESET_ALL)
-    print("  • " + Fore.CYAN + "Explícame qué es machine learning en 3 puntos" + Style.RESET_ALL)
-    print("  • " + Fore.CYAN + "Escribe un email profesional de seguimiento a un cliente" + Style.RESET_ALL)
-    print("  • " + Fore.CYAN + "Genera 5 ideas para un proyecto de Python" + Style.RESET_ALL)
-    print("  • " + Fore.CYAN + "Analiza este código y sugiere mejoras" + Style.RESET_ALL)
-    print("  • " + Fore.CYAN + "Crea un plan de marketing para un startup" + Style.RESET_ALL)
+    """Shows examples of tasks user can input"""
+    print("\n" + Fore.YELLOW + "📝 Write ANY task you want to execute:" + Style.RESET_ALL)
+    print("\n" + Fore.GREEN + "Example tasks you can try:" + Style.RESET_ALL)
+    print("  • " + Fore.CYAN + "Summarize this article about artificial intelligence" + Style.RESET_ALL)
+    print("  • " + Fore.CYAN + "Translate 'Hello World' to Spanish and French" + Style.RESET_ALL)
+    print("  • " + Fore.CYAN + "Explain machine learning in 3 bullet points" + Style.RESET_ALL)
+    print("  • " + Fore.CYAN + "Write a professional follow-up email to a client" + Style.RESET_ALL)
+    print("  • " + Fore.CYAN + "Generate 5 ideas for a Python project" + Style.RESET_ALL)
+    print("  • " + Fore.CYAN + "Analyze this code and suggest improvements" + Style.RESET_ALL)
+    print("  • " + Fore.CYAN + "Create a marketing plan for a startup" + Style.RESET_ALL)
 
 
 def obtener_input_usuario():
     """
-    Obtiene la tarea del usuario de forma interactiva.
-    Acepta múltiples líneas y espacios múltiples.
+    Gets user task interactively.
+    Accepts multiple lines and spaces.
     
     Returns:
-        str: La tarea ingresada por el usuario
+        str: Task entered by user
     """
     mostrar_header()
     mostrar_ejemplos()
     
     print("\n" + "-"*80)
-    print(Fore.CYAN + "💡 Tip: Puedes escribir con espacios normales, presiona Enter cuando termines" + Style.RESET_ALL)
+    print(Fore.CYAN + "💡 Tip: You can write with normal spaces, press Enter when done" + Style.RESET_ALL)
     print()
     
     try:
-        tarea = input(Fore.YELLOW + Style.BRIGHT + "💬 Tu tarea: " + Style.RESET_ALL)
-        # Limpiar espacios múltiples pero mantener la tarea legible
-        tarea = ' '.join(tarea.split())  # Normaliza espacios múltiples a uno solo
+        tarea = input(Fore.YELLOW + Style.BRIGHT + "💬 Your task: " + Style.RESET_ALL)
+        # Clean multiple spaces but keep task readable
+        tarea = ' '.join(tarea.split())  # Normalize multiple spaces to one
     except (KeyboardInterrupt, EOFError):
-        print("\n\n👋 Demo cancelada por el usuario")
+        print("\n\n👋 Demo cancelled by user")
         sys.exit(0)
     
     if not tarea:
-        print(Fore.RED + "❌ Error: Debes ingresar una tarea" + Style.RESET_ALL)
+        print(Fore.RED + "❌ Error: You must enter a task" + Style.RESET_ALL)
         sys.exit(1)
     
     if len(tarea) < 10:
-        print(Fore.YELLOW + "⚠️  Advertencia: Tarea muy corta, considera dar más detalles" + Style.RESET_ALL)
+        print(Fore.YELLOW + "⚠️  Warning: Task too short, consider adding more details" + Style.RESET_ALL)
     
     return tarea
 
 
 def limpiar_memoria():
     """
-    Limpia la memoria para empezar fresh (sin estrategias previas).
-    Esto asegura que el Run 1 siempre use el modelo caro por default.
+    Cleans memory to start fresh (no previous strategies).
+    This ensures Run 1 always uses expensive model by default.
     """
-    print("\n" + Fore.CYAN + "🧹 Limpiando memoria del sistema..." + Style.RESET_ALL)
+    print("\n" + Fore.CYAN + "🧹 Cleaning system memory..." + Style.RESET_ALL)
     
     try:
         with open("data/estrategias.json", "w") as f:

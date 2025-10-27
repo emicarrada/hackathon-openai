@@ -1,29 +1,29 @@
 """
-Smart Optimizer Agent - Arquitectura 6 Nodos con AUTOMEJORA REAL
+Flux Agent - 6-Node Architecture with REAL SELF-IMPROVEMENT
 
-Implementado durante el Hackathon OpenAI (23 oct 2025).
-Sistema que aprende de sus errores mediante ciclo Run 1 → Auditoría → Run 2.
+Implemented during OpenAI Hackathon (Oct 23, 2025).
+System that learns from its executions through Run 1 → Audit → Run 2 cycle.
 
-Arquitectura completa:
-1. recibir_tarea → Clasifica tipo de tarea
-2. consultar_memoria → Busca estrategia aprendida en JSON
-3. ejecutar_tarea → Llama a OpenAI con modelo seleccionado
-4. evaluar_contador → Captura métricas (tokens, latencia)
-5. auditor_feedback → LLM-Crítico analiza eficiencia
-6. actualizar_memoria → Guarda estrategia optimizada
+Complete Architecture:
+1. recibir_tarea → Classifies task type
+2. consultar_memoria → Searches learned strategy in JSON
+3. ejecutar_tarea → Calls OpenAI with selected model
+4. evaluar_contador → Captures metrics (tokens, latency)
+5. auditor_feedback → LLM-Critic analyzes efficiency
+6. actualizar_memoria → Saves optimized strategy
 
-NARRATIVA PARA JUECES:
-- Run 1 (Inocente): Usa GPT-4o por defecto → 1500 tokens
-- Auditor detecta desperdicio y recomienda GPT-3.5-turbo
-- Memoria se actualiza
-- Run 2 (Optimizado): Usa GPT-3.5-turbo → 200 tokens
-- AHORRO: 87% demostrado en vivo
+NARRATIVE FOR JUDGES:
+- Run 1 (Baseline): Uses GPT-4o by default → 1500 tokens
+- Auditor detects waste and recommends GPT-3.5-turbo
+- Memory gets updated
+- Run 2 (Optimized): Uses GPT-3.5-turbo → 200 tokens
+- SAVINGS: 87% demonstrated live
 """
 
 from langgraph.graph import StateGraph, END
 from typing import TypedDict
 
-# Importar los 6 nodos del sistema de automejora
+# Import the 6 nodes of the self-improvement system
 from src.nodos.recibir_tarea import recibir_tarea
 from src.nodos.consultar_memoria import consultar_memoria
 from src.nodos.ejecutar_tarea import ejecutar_tarea

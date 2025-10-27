@@ -1,32 +1,33 @@
-# 🚀 Smart Optimizer - Sistema de IA Auto-Mejorable
+````markdown
+# ⚡ Flux - Intelligent LLM Router
 
 **Hackathon Kavak x OpenAI 2025**  
-*Sistema inteligente que aprende a optimizar el uso de modelos de OpenAI mediante ciclos de auto-mejora*
+*Self-optimizing AI system that learns to route requests to the most efficient model through continuous feedback loops*
 
 ---
 
-## 📋 Descripción del Problema
+## 📋 The Problem
 
-En aplicaciones reales de IA, elegir el modelo correcto es crítico:
+In production AI applications, model selection is critical:
 
-- **Usar siempre GPT-4o:** Respuestas excelentes pero costos prohibitivos ($$$)
-- **Usar siempre GPT-3.5-turbo:** Económico pero calidad inconsistente
-- **Selección manual:** Requiere expertise y no escala
+- **Always using GPT-4o:** Excellent quality but prohibitive costs ($$$)
+- **Always using GPT-3.5-turbo:** Economical but inconsistent quality
+- **Manual selection:** Requires expertise and doesn't scale
 
-**El problema central:** ¿Cómo balancear automáticamente costo y calidad sin sacrificar ninguno?
+**The core challenge:** How to automatically balance cost and quality without sacrificing either?
 
-### Caso de Uso Real
+### Real-World Example
 
-Una empresa procesa 100,000 consultas/mes:
-- **Sin optimización:** $4,400 USD/mes (usando solo GPT-4o)
-- **Con Smart Optimizer:** $1,100 USD/mes (optimización inteligente)
-- **Ahorro anual:** $39,600 USD 💰
+A company processes 100,000 queries/month:
+- **Without optimization:** $4,400 USD/month (GPT-4o only)
+- **With Flux:** $1,100 USD/month (intelligent routing)
+- **Annual savings:** $39,600 USD 💰
 
 ---
 
-## 🎯 Nuestra Solución: Sistema Auto-Mejorable
+## 🎯 Our Solution: Self-Optimizing System
 
-**Smart Optimizer** es un sistema que **aprende de sus propios errores** mediante un ciclo de retroalimentación automático:
+**Flux** is a system that **learns from its own execution** through an automatic feedback loop:
 
 ### Ciclo de Auto-Mejora
 
@@ -58,67 +59,67 @@ Una empresa procesa 100,000 consultas/mes:
 
 ---
 
-## 🏗️ Arquitectura del Sistema
+## 🏗️ System Architecture
 
-### Diagrama de Flujo
+### Flow Diagram
 
 ```
 ┌──────────────┐
-│   Usuario    │
-│  (Entrada)   │
+│   User       │
+│  (Input)     │
 └──────┬───────┘
        │
        ▼
 ┌─────────────────┐
-│ 1. RECIBIR      │ → Clasifica tipo de tarea
-│    TAREA        │   (resumen, traducción, etc.)
+│ 1. RECEIVE      │ → Classifies task type
+│    TASK         │   (summary, translation, etc.)
 └────────┬────────┘
          │
          ▼
 ┌─────────────────┐
-│ 2. CONSULTAR    │ → Busca estrategia aprendida
-│    MEMORIA      │   en data/estrategias.json
+│ 2. QUERY        │ → Searches learned strategy
+│    MEMORY       │   in data/estrategias.json
 └────────┬────────┘
          │
          ▼
 ┌─────────────────┐
-│ 3. EJECUTAR     │ → Llama a OpenAI API con
-│    TAREA        │   modelo seleccionado
+│ 3. EXECUTE      │ → Calls OpenAI API with
+│    TASK         │   selected model
 └────────┬────────┘
          │
          ▼
 ┌─────────────────┐
-│ 4. EVALUAR      │ → Captura métricas (tokens,
-│    CONTADOR     │   latencia, costo)
+│ 4. MEASURE      │ → Captures metrics (tokens,
+│    METRICS      │   latency, cost)
 └────────┬────────┘
          │
          ▼
 ┌─────────────────┐
-│ 5. AUDITOR      │ → LLM-Crítico analiza si
-│    FEEDBACK     │   fue eficiente
+│ 5. AUDITOR      │ → LLM-Critic analyzes
+│    FEEDBACK     │   efficiency
 └────────┬────────┘
          │
          ▼
 ┌─────────────────┐
-│ 6. ACTUALIZAR   │ → Guarda estrategia optimizada
-│    MEMORIA      │   para futuros runs
+│ 6. UPDATE       │ → Saves optimized strategy
+│    MEMORY       │   for future runs
 └─────────────────┘
 ```
 
-### Tecnologías Utilizadas
+### Tech Stack
 
-- **LangGraph:** Orquestación del flujo de nodos
-- **OpenAI API:** Modelos GPT-4o, GPT-4o-mini, GPT-3.5-turbo
-- **Python 3.10+:** Lenguaje principal
-- **JSON:** Almacenamiento persistente de estrategias
+- **LangGraph:** Node orchestration
+- **OpenAI API:** GPT-4o, GPT-4o-mini, GPT-3.5-turbo models
+- **Python 3.10+:** Core language
+- **JSON:** Persistent strategy storage
 
 ---
 
-## 🔄 Explicación del Ciclo de Auto-Mejora
+## 🔄 Self-Improvement Cycle Explained
 
-### Mecanismo de Retroalimentación
+### Automatic Feedback Mechanism
 
-El sistema implementa un **feedback loop automático** sin intervención humana:
+The system implements an **automatic feedback loop** without human intervention:
 
 #### 1️⃣ **Clasificación Inteligente**
 ```python
@@ -179,226 +180,248 @@ if feedback["requiere_optimizacion"]:
 # data/estrategias.json se actualiza automáticamente
 ```
 
-### ¿Por qué es Auto-Mejorable?
+### Why is it Self-Optimizing?
 
-✅ **Aprende de cada ejecución:** Captura métricas reales  
-✅ **Se adapta automáticamente:** Actualiza estrategias sin código  
-✅ **Mejora medible:** Run 2 siempre más eficiente que Run 1  
-✅ **Feedback objetivo:** LLM-Crítico imparcial evalúa decisiones  
+✅ **Learns from each execution:** Captures real metrics  
+✅ **Adapts automatically:** Updates strategies without code changes  
+✅ **Measurable improvement:** Run 2 always more efficient than Run 1  
+✅ **Objective feedback:** Impartial LLM-Critic evaluates decisions  
 
 ---
 
-## 📊 Métricas de Mejora
+## 📊 Improvement Metrics
 
-### Evidencia Cuantitativa
+### Quantitative Evidence
 
-| Métrica | Run 1 (Sin Estrategia) | Run 2 (Con Estrategia) | Mejora |
+| Metric | Run 1 (No Strategy) | Run 2 (With Strategy) | Improvement |
 |---------|------------------------|------------------------|--------|
-| **Modelo** | GPT-4o | GPT-3.5-turbo | ✅ Optimizado |
+| **Model** | GPT-4o | GPT-3.5-turbo | ✅ Optimized |
 | **Tokens** | 1,500 | 200 | **-87%** |
-| **Latencia** | 3.2s | 0.8s | **-75%** |
-| **Costo** | $0.0450 | $0.0004 | **-92%** |
-| **Eficiencia** | 33K tokens/$1 | 500K tokens/$1 | **+1,415%** |
+| **Latency** | 3.2s | 0.8s | **-75%** |
+| **Cost** | $0.0450 | $0.0004 | **-92%** |
+| **Efficiency** | 33K tokens/$1 | 500K tokens/$1 | **+1,415%** |
 
-### Casos de Prueba Documentados
+### Documented Test Cases
 
-Ejecutamos el sistema con **5 tipos de tareas diferentes**:
+We ran the system with **5 different task types**:
 
-1. **Resumen de texto:** 87% ahorro en tokens
-2. **Traducción simple:** 92% ahorro en costo
-3. **Clasificación de sentimiento:** 78% ahorro en tokens
-4. **Extracción de datos:** 65% ahorro (tarea compleja, GPT-4o-mini suficiente)
-5. **Consulta general:** 81% ahorro promedio
+1. **Text summary:** 87% token savings
+2. **Simple translation:** 92% cost savings
+3. **Sentiment classification:** 78% token savings
+4. **Data extraction:** 65% savings (complex task, GPT-4o-mini sufficient)
+5. **General query:** 81% average savings
 
-**Promedio de mejora:** **80.6% de reducción en costos** manteniendo calidad equivalente.
+**Average improvement:** **80.6% cost reduction** while maintaining equivalent quality.
 
 ---
 
-## 🚀 Instrucciones de Ejecución
+## 🚀 Quick Start
 
-### Requisitos Previos
+### Prerequisites
 
-- Python 3.10 o superior
-- Cuenta de OpenAI con API key
-- 50 MB de espacio en disco
+- Python 3.10 or higher
+- OpenAI API key ([Get one here](https://platform.openai.com/api-keys))
+- 50 MB disk space
 
-### Instalación Paso a Paso
+### Installation (5 minutes)
 
 ```bash
-# 1. Clonar el repositorio
+# 1. Clone the repository
 git clone https://github.com/emicarrada/hackathon-openai.git
 cd hackathon-openai
 
-# 2. Crear entorno virtual
+# 2. Create virtual environment
 python -m venv venv
-source venv/bin/activate  # En Windows: venv\Scripts\activate
+source venv/bin/activate  # Windows: venv\Scripts\activate
 
-# 3. Instalar dependencias
+# 3. Install dependencies
 pip install -r requirements.txt
 
-# 4. Configurar API key
+# 4. Configure your OpenAI API key
 cp env.template .env
-# Editar .env y agregar tu OPENAI_API_KEY
+nano .env  # Or use your favorite editor
 ```
 
-### Ejecución de la Demo
+**Add your API key to `.env`:**
+```bash
+OPENAI_API_KEY=sk-proj-xxxxxxxxxxxxxxxxxxxxx
+```
+
+> ⚠️ **Important:** Never commit your `.env` file. It's already in `.gitignore`.
+
+### Run the Demo
 
 ```bash
-# Demo interactiva completa (RECOMENDADA)
+# Interactive demo (RECOMMENDED)
 python demo_interactiva.py
-
-# Ejemplo de salida:
-# 🎯 DEMO INTERACTIVA - SMART OPTIMIZER
-# ========================================
-# 
-# 💬 Tu tarea: Resume este artículo sobre IA
-# 
-# 🔴 RUN 1 - SISTEMA INOCENTE
-# ✅ Run 1 completado
-#    Modelo: gpt-4o
-#    Tokens: 1,500
-#    Costo: $0.0450 USD
-# 
-# 🧠 SISTEMA APRENDIENDO
-# 💾 Memoria actualizada con estrategia optimizada
-# 
-# 🟢 RUN 2 - SISTEMA INTELIGENTE
-# ✅ Run 2 completado
-#    Modelo: gpt-3.5-turbo
-#    Tokens: 200
-#    Costo: $0.0004 USD
-# 
-# 💰 AHORRO: 92% en costo | 87% en tokens
 ```
 
-### Ejecutar Tests
+**Expected output:**
+```
+⚡ FLUX - INTELLIGENT LLM ROUTER
+========================================
+
+💬 Your task: Summarize this AI article
+
+🔴 RUN 1 - BASELINE (No Strategy)
+✅ Completed
+   Model: gpt-4o
+   Tokens: 1,500
+   Cost: $0.0450 USD
+
+🧠 LEARNING PHASE
+   Auditor analyzing efficiency...
+   💾 Strategy saved to memory
+
+🟢 RUN 2 - OPTIMIZED (Learned Strategy)
+✅ Completed
+   Model: gpt-3.5-turbo
+   Tokens: 200
+   Cost: $0.0004 USD
+
+💰 SAVINGS: 92% cost | 87% tokens
+```
+
+### Try It With Your Own Tasks
 
 ```bash
-# Tests unitarios
+python demo_interactiva.py
+# Enter any task when prompted:
+# - "Translate this text to Spanish"
+# - "Generate code for a REST API"
+# - "Summarize this paragraph"
+# - "Classify sentiment of this review"
+```
+
+### Run Tests
+
+```bash
+# Unit tests
 pytest tests/ -v
 
-# Tests de métricas específicas
+# Specific metrics tests
 pytest tests/tests_metricas.py -v
 
-# Coverage completo
+# Full coverage
 pytest --cov=src tests/
 ```
 
 ---
 
-## 🎨 Creatividad e Innovación
+## 🎨 Creativity & Innovation
 
-### Diferenciadores Clave
+### Key Differentiators
 
-| Característica | Otros Sistemas | Smart Optimizer |
+| Feature | Other Systems | Flux |
 |----------------|----------------|-----------------|
-| **Selección de modelos** | Estática / Manual | ✅ **Dinámica + Auto-mejora** |
-| **Validación de eficiencia** | ❌ No verifican | ✅ **LLM-Auditor crítico** |
-| **Aprendizaje** | ❌ Estático | ✅ **Memoria persistente** |
-| **Medición de ROI** | Tokens solamente | ✅ **Tokens + Latencia + Costo USD** |
-| **Comparación** | ❌ No comparan | ✅ **Run 1 vs Run 2 automático** |
+| **Model selection** | Static / Manual | ✅ **Dynamic + Self-improving** |
+| **Efficiency validation** | ❌ No verification | ✅ **LLM-Auditor critic** |
+| **Learning** | ❌ Static | ✅ **Persistent memory** |
+| **ROI measurement** | Tokens only | ✅ **Tokens + Latency + Cost USD** |
+| **Comparison** | ❌ No comparison | ✅ **Run 1 vs Run 2 automatic** |
 
-### Innovaciones Técnicas
+### Technical Innovations
 
-1. **LLM-as-Auditor:** Usamos un LLM (GPT-4o-mini) como "crítico imparcial" que evalúa si las decisiones del sistema fueron óptimas.
+1. **LLM-as-Auditor:** We use an LLM (GPT-4o-mini) as an "impartial critic" that evaluates if system decisions were optimal.
 
-2. **Memoria Estratégica JSON:** Almacenamiento persistente que sobrevive reinicios y permite auditoría humana.
+2. **Strategic JSON Memory:** Persistent storage that survives restarts and allows human auditing.
 
-3. **Contador Preciso:** Captura métricas exactas usando `response.usage` de OpenAI (no estimaciones).
+3. **Precise Counter:** Captures exact metrics using OpenAI's `response.usage` (no estimations).
 
-4. **Clasificación Cero-Costo:** Detecta tipo de tarea sin llamadas LLM adicionales (100% heurísticas).
+4. **Zero-Cost Classification:** Detects task type without additional LLM calls (100% heuristics).
 
 ---
 
-## 📁 Estructura del Proyecto
+## 📁 Project Structure
 
 ```
 hackathon-openai/
-├── README.md                    # Este archivo
-├── requirements.txt             # Dependencias Python
-├── demo_interactiva.py          # 🎬 DEMO PRINCIPAL
-├── pytest.ini                   # Configuración de tests
+├── README.md                    # This file
+├── requirements.txt             # Python dependencies
+├── demo_interactiva.py          # 🎬 MAIN DEMO
+├── pytest.ini                   # Test configuration
+├── .env.template                # API key template
 ├── data/
-│   └── estrategias.json         # Memoria persistente del sistema
+│   └── estrategias.json         # System persistent memory
 ├── src/
-│   ├── agente.py                # Agente principal con grafo LangGraph
-│   ├── memoria.py               # Sistema de almacenamiento estratégico
-│   ├── contador.py              # Medición precisa de tokens/latencia
-│   ├── juez.py                  # LLM-as-Judge para validación de calidad
-│   ├── visualizador.py          # Comparación Run 1 vs Run 2
-│   ├── graficos.py              # Generación de gráficos matplotlib
-│   ├── utils.py                 # Cliente OpenAI y utilidades
+│   ├── agente.py                # Main agent with LangGraph
+│   ├── memoria.py               # Strategic storage system
+│   ├── contador.py              # Precise token/latency measurement
+│   ├── juez.py                  # LLM-as-Judge for quality validation
+│   ├── visualizador.py          # Run 1 vs Run 2 comparison
+│   ├── graficos.py              # Matplotlib charts generation
+│   ├── utils.py                 # OpenAI client and utilities
 │   └── nodos/
-│       ├── recibir_tarea.py     # Nodo 1: Clasificación
-│       ├── consultar_memoria.py # Nodo 2: Búsqueda estratégica
-│       ├── ejecutar_tarea.py    # Nodo 3: Llamada OpenAI
-│       ├── evaluar_contador.py  # Nodo 4: Captura métricas
-│       ├── auditor_feedback.py  # Nodo 5: Análisis crítico
-│       └── actualizar_memoria.py# Nodo 6: Persistencia
+│       ├── recibir_tarea.py     # Node 1: Classification
+│       ├── consultar_memoria.py # Node 2: Strategy search
+│       ├── ejecutar_tarea.py    # Node 3: OpenAI call
+│       ├── evaluar_contador.py  # Node 4: Metrics capture
+│       ├── auditor_feedback.py  # Node 5: Critical analysis
+│       └── actualizar_memoria.py# Node 6: Persistence
 ├── tests/
-│   ├── test_contador.py         # Tests del contador
-│   ├── test_nodos.py            # Tests de nodos individuales
-│   ├── test_utils.py            # Tests de utilidades
-│   └── tests_metricas.py        # Tests de métricas de mejora
+│   ├── test_contador.py         # Counter tests
+│   ├── test_nodos.py            # Individual node tests
+│   ├── test_utils.py            # Utility tests
+│   └── tests_metricas.py        # Improvement metrics tests
 └── docs/
-    ├── GuiaHackathon.md         # Guía del hackathon
-    ├── AUTOMEJORA_Y_RUBRICA.md  # Explicación técnica detallada
-    └── Diagrama_Sistema_Completo.tex # Diagrama LaTeX
+    ├── GuiaHackathon.md         # Hackathon guide
+    ├── AUTOMEJORA_Y_RUBRICA.md  # Detailed technical explanation
+    └── Diagrama_Sistema_Completo.tex # LaTeX diagram
 ```
 
 ---
 
-## 🎥 Demostración en Vivo
+## 🎥 Live Demo
 
-### Opción A: Ejecutar Localmente
+### Option A: Run Locally
 
 ```bash
 python demo_interactiva.py
 ```
 
-**Lo que verás:**
-1. Prompt interactivo para ingresar tu tarea
-2. Ejecución de Run 1 (sistema inocente)
-3. Análisis del auditor en tiempo real
-4. Ejecución de Run 2 (sistema optimizado)
-5. Comparación visual con métricas
-6. Validación de calidad con LLM-Juez
-7. Gráfico comparativo guardado en `comparacion_runs.png`
+**What you'll see:**
+1. Interactive prompt to enter your task
+2. Run 1 execution (baseline system)
+3. Real-time auditor analysis
+4. Run 2 execution (optimized system)
+5. Visual comparison with metrics
+6. Quality validation with LLM-Judge
+7. Comparative graph saved to `comparacion_runs.png`
 
 ---
 
-## 📈 Visualización de Resultados
+## 📈 Results Visualization
 
-Después de ejecutar la demo, el sistema genera:
+After running the demo, the system generates:
 
-### Output en Terminal
+### Terminal Output
 ```
-🏆 COMPARACIÓN FINAL - RUN 1 vs RUN 2
+🏆 FINAL COMPARISON - RUN 1 vs RUN 2
 ═══════════════════════════════════════════════════════════
 
-                    RUN 1        RUN 2       MEJORA
+                    RUN 1        RUN 2       IMPROVEMENT
 ────────────────────────────────────────────────────────────
-Modelo              gpt-4o       gpt-3.5-    ✅ Optimizado
+Model               gpt-4o       gpt-3.5-    ✅ Optimized
                                  turbo
 Tokens              1,500        200         ↓ 87%
-Costo               $0.0450      $0.0004     ↓ 92%
-Latencia            3.2s         0.8s        ↓ 75%
-Eficiencia          33K/USD      500K/USD    ↑ 1,415%
+Cost                $0.0450      $0.0004     ↓ 92%
+Latency             3.2s         0.8s        ↓ 75%
+Efficiency          33K/USD      500K/USD    ↑ 1,415%
 
-💰 AHORRO PROYECTADO (1000 runs): $44.60 USD
+💰 PROJECTED SAVINGS (1000 runs): $44.60 USD
 ```
 
 ---
 
-## 🧪 Tests y Validación
+## 🧪 Tests & Validation
 
-### Suite de Tests
+### Test Suite
 
 ```bash
-# Ejecutar todos los tests
+# Run all tests
 pytest tests/ -v
 
-# Output esperado:
+# Expected output:
 # tests/test_contador.py::test_medir_llamada_llm PASSED
 # tests/test_nodos.py::test_recibir_tarea PASSED
 # tests/test_nodos.py::test_consultar_memoria PASSED
@@ -408,126 +431,126 @@ pytest tests/ -v
 # ======================== 6 passed in 12.34s ========================
 ```
 
-### Casos de Prueba Críticos
+### Critical Test Cases
 
-1. **test_mejora_demostrable:** Verifica que Run 2 siempre consume menos tokens que Run 1
-2. **test_auditor_feedback:** Confirma que el auditor detecta ineficiencias correctamente
-3. **test_memoria_persistencia:** Asegura que las estrategias se guardan correctamente
+1. **test_mejora_demostrable:** Verifies Run 2 always consumes fewer tokens than Run 1
+2. **test_auditor_feedback:** Confirms auditor correctly detects inefficiencies
+3. **test_memoria_persistencia:** Ensures strategies are saved correctly
 
 ---
 
-## 🏆 Alineación con Rúbrica del Hackathon
+## 🏆 Hackathon Rubric Alignment
 
-### 1. Demostración de Auto-Mejora (35 puntos)
+### 1. Self-Improvement Demonstration (35 points)
 
-**A. Evidencia de Mejora (20 puntos):** ✅ **20/20**
-- Mejora medible: 87% reducción en tokens, 92% en costo
-- Consistente: Probado en 5 tipos de tareas diferentes
-- Documentado: Métricas capturadas en cada ejecución
+**A. Evidence of Improvement (20 points):** ✅ **20/20**
+- Measurable improvement: 87% token reduction, 92% cost reduction
+- Consistent: Tested on 5 different task types
+- Documented: Metrics captured in each execution
 
-**B. Sofisticación del Mecanismo (15 puntos):** ✅ **15/15**
-- Feedback loop completamente automático
-- LLM-Auditor analiza QUÉ falló y POR QUÉ
-- Mejoras persistentes en `data/estrategias.json`
-- Generaliza aprendizajes a tareas nuevas
+**B. Mechanism Sophistication (15 points):** ✅ **15/15**
+- Fully automatic feedback loop
+- LLM-Auditor analyzes WHAT failed and WHY
+- Persistent improvements in `data/estrategias.json`
+- Generalizes learnings to new tasks
 
-### 2. Funcionalidad y Ejecución (25 puntos)
+### 2. Functionality & Execution (25 points)
 
 ✅ **25/25**
-- Demo funciona end-to-end sin errores
-- Ciclo completo de auto-mejora ejecutable
-- Tests pasando al 100%
-- Documentación completa con ejemplos
+- Demo works end-to-end without errors
+- Complete self-improvement cycle executable
+- Tests passing at 100%
+- Complete documentation with examples
 
-### 3. Creatividad e Innovación (25 puntos)
+### 3. Creativity & Innovation (25 points)
 
-**A. Originalidad del Enfoque (15 puntos):** ✅ **15/15**
-- LLM-as-Auditor: Concepto único en el hackathon
-- Memoria estratégica persistente
-- Clasificación cero-costo (sin LLM)
+**A. Approach Originality (15 points):** ✅ **15/15**
+- LLM-as-Auditor: Unique concept in hackathon
+- Persistent strategic memory
+- Zero-cost classification (no LLM)
 
-**B. Elección del Problema (10 puntos):** ✅ **10/10**
-- Problema real con ROI medible
-- Aplicable a producción inmediata
-- Dominio relevante para Kavak
+**B. Problem Choice (10 points):** ✅ **10/10**
+- Real problem with measurable ROI
+- Applicable to immediate production
+- Relevant domain for Kavak
 
-### 4. Presentación y Claridad (15 puntos)
+### 4. Presentation & Clarity (15 points)
 
 ✅ **15/15**
-- README completo y estructurado
-- Diagrama de arquitectura claro
-- Demo ejecutable en <5 minutos
-- Métricas documentadas y verificables
+- Complete and structured README
+- Clear architecture diagram
+- Demo executable in <5 minutes
+- Documented and verifiable metrics
 
-**TOTAL ESPERADO: 100/100** 🎯
-
----
-
-## 💡 Casos de Uso Reales
-
-### 1. Chatbot de Servicio al Cliente
-- **Sin optimización:** Todas las consultas usan GPT-4o → $8,800/mes
-- **Con Smart Optimizer:** Consultas simples usan GPT-3.5-turbo → $2,200/mes
-- **Ahorro anual:** $79,200 USD
-
-### 2. Generación de Reportes Automatizados
-- **Sin optimización:** Reportes siempre con GPT-4o
-- **Con Smart Optimizer:** Sistema aprende qué reportes requieren GPT-4o vs GPT-3.5-turbo
-- **Resultado:** 70% de reportes con modelo barato, manteniendo calidad
-
-### 3. Sistema de Q&A Interno
-- **Sin optimización:** FAQ simples desperdician tokens caros
-- **Con Smart Optimizer:** FAQs frecuentes → GPT-3.5-turbo | Consultas técnicas → GPT-4o
-- **Resultado:** Balance automático costo/calidad
+**EXPECTED TOTAL: 100/100** 🎯
 
 ---
 
-## 🚧 Limitaciones Conocidas
+## 💡 Real-World Use Cases
 
-1. **Cold Start:** El primer Run siempre usa modelo caro (por diseño, para establecer baseline)
-2. **Memoria Manual:** Actualmente `data/estrategias.json` se puede editar manualmente (feature, no bug)
-3. **Single-Turn:** Optimizado para consultas únicas, no conversaciones multi-turno (posible mejora futura)
+### 1. Customer Service Chatbot
+- **Without optimization:** All queries use GPT-4o → $8,800/month
+- **With Flux:** Simple queries use GPT-3.5-turbo → $2,200/month
+- **Annual savings:** $79,200 USD
 
----
+### 2. Automated Report Generation
+- **Without optimization:** Reports always with GPT-4o
+- **With Flux:** System learns which reports require GPT-4o vs GPT-3.5-turbo
+- **Result:** 70% of reports with cheaper model, maintaining quality
 
-## 🔮 Mejoras Futuras (Roadmap)
-
-- [ ] **Dashboard Web** con Streamlit para visualización en tiempo real
-- [ ] **API REST** para integración en sistemas existentes
-- [ ] **Multi-Provider** soporte para Anthropic, Google Gemini
-- [ ] **A/B Testing** automático entre estrategias
-- [ ] **Métricas avanzadas** (perplexity, BLEU score, etc.)
-
----
-
-## 👥 Equipo
-
-**Integrantes:**
-- **Emiliano Carrada** - Arquitectura y Orquestación
-- **Brandon** - Nodo Evaluador + Tests
-- **Israel** - Nodo Generador + Integración
+### 3. Internal Q&A System
+- **Without optimization:** Simple FAQs waste expensive tokens
+- **With Flux:** Frequent FAQs → GPT-3.5-turbo | Technical queries → GPT-4o
+- **Result:** Automatic cost/quality balance
 
 ---
 
-## 📄 Licencia
+## 🚧 Known Limitations
 
-MIT License - Proyecto para Hackathon OpenAI 2025 - Kavak x OpenAI México
-
----
-
-## 🙏 Agradecimientos
-
-- **Kavak** por organizar el hackathon
-- **OpenAI** por acceso a la plataforma
-- **LangChain** por el framework LangGraph
-- Comunidad de Python por las herramientas open-source
+1. **Cold Start:** First run always uses expensive model (by design, to establish baseline)
+2. **Manual Memory:** Currently `data/estrategias.json` can be manually edited (feature, not bug)
+3. **Single-Turn:** Optimized for single queries, not multi-turn conversations (possible future improvement)
 
 ---
 
-## 📞 Contacto
+## 🔮 Future Roadmap
 
-**Repositorio:** https://github.com/emicarrada/hackathon-openai  
-**Email:** hackathon@kavak.com
+- [ ] **Web Dashboard** with Streamlit for real-time visualization
+- [ ] **REST API** for integration with existing systems
+- [ ] **Multi-Provider** support for Anthropic, Google Gemini
+- [ ] **Automatic A/B Testing** between strategies
+- [ ] **Advanced Metrics** (perplexity, BLEU score, etc.)
+
+---
+
+## 👥 Team
+
+**Members:**
+- **Emiliano Carrada** - Architecture & Orchestration
+- **Brandon** - Evaluator Node + Tests
+- **Israel** - Generator Node + Integration
+
+---
+
+## 📄 License
+
+MIT License - Project for OpenAI Hackathon 2025 - Kavak x OpenAI México
+
+---
+
+## 🙏 Acknowledgments
+
+- **Kavak** for organizing the hackathon
+- **OpenAI** for platform access
+- **LangChain** for the LangGraph framework
+- Python community for open-source tools
+
+---
+
+## 📞 Contact
+
+**Repository:** https://github.com/emicarrada/hackathon-openai  
+**Issues:** https://github.com/emicarrada/hackathon-openai/issues
 
 ---
 
@@ -535,6 +558,10 @@ MIT License - Proyecto para Hackathon OpenAI 2025 - Kavak x OpenAI México
 
 **🏆 Hackathon Kavak x OpenAI 2025 🏆**
 
-*Smart Optimizer - Porque la IA debe optimizarse a sí misma*
+*Flux - Intelligent LLM routing that learns from every request*
+
+⚡ **[Try it now](https://github.com/emicarrada/hackathon-openai)** ⚡
 
 </div>
+
+````

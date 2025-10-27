@@ -33,20 +33,17 @@ Un sistema auto-mejorable necesita:
 4. **Mejora medible** - ¿Puedes probar que Run 2 es mejor que Run 1 y
     subsequente?
 
-### Ejemplo de Proyecto
+### Example Project
 
-**AI de Servicio al Cliente Personalizado:**
+**Personalized Customer Service AI:**
 
-- **Run 1:** Agente AI maneja consulta de cliente con enfoque genérico
-- **Evaluación:** Sistema analiza calidad de conversación, señales de
-    satisfacción del cliente, problemas sin resolver
-- **Aprendizaje:** Actualiza perfil de memoria del cliente, identifica patrones de
-    comunicación que funcionan/no funcionan, refina estrategia de orquestación
-- **Run 2:** Mismo cliente o consulta similar → AI usa patrones aprendidos,
-    memoria personalizada, orquestación mejorada
-- **Resultado:** Respuestas mediblemente mejores (resolución más rápida,
-    mayor satisfacción, menos escalaciones)
-Esto funciona porque:
+- **Run 1:** AI agent handles customer query with generic approach
+- **Evaluation:** System analyzes conversation quality, customer satisfaction signals, unresolved issues
+- **Learning:** Updates customer memory profile, identifies communication patterns that work/don't work, refines orchestration strategy
+- **Run 2:** Same customer or similar query → AI uses learned patterns, personalized memory, improved orchestration
+- **Result:** Measurably better responses (faster resolution, higher satisfaction, fewer escalations)
+
+This works because:
 
 
 - Métricas de evaluación claras (tiempo de resolución, satisfacción)
